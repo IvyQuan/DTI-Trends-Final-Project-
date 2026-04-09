@@ -1,4 +1,5 @@
 # Advanced React Starter Template
+# edited push to main
 #hihihi - amanda try 2
 A Trends in Web Development Starter Template.
 
