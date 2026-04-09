@@ -18,7 +18,7 @@ const router = createBrowserRouter([
         ],
     },
 ]);
-//dsds
+//dsd
 export default function App() {
     return (
         <MantineProvider withGlobalStyles withNormalizeCSS>
