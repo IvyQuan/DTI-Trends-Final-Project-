@@ -1,6 +1,5 @@
 # Advanced React Starter Template
-# edited push to main
-#hihihi - amanda try 2
+#hihihi - amanda
 A Trends in Web Development Starter Template.
 
 This template is appropriate for:
@@ -28,7 +27,7 @@ It also utilizes the following core libraries:
 ## Development
 
 ### Setup
-# does this work
+
 First, run `pnpm install` to install all dependencies.
 
 Then, run `pnpm dev` to start the development server.
