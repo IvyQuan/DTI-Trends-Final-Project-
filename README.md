@@ -1,5 +1,5 @@
 # Advanced React Starter Template
-# edited
+# edited push to main
 A Trends in Web Development Starter Template.
 
 This template is appropriate for:
