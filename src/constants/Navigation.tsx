@@ -1,5 +1,5 @@
-import GamesPage from "../pages/Games";
-import ScorePage from "../pages/Score";
+import AboutPage from "../pages/About";
+import Feature from "../pages/Feature";
 import HomePage from "../pages/Home";
 
 export const PATHS: {
@@ -13,13 +13,13 @@ export const PATHS: {
         element: <HomePage />,
     },
     {
-        link: "/games",
-        label: "Games",
-        element: <GamesPage />,
+        link: "/about",
+        label: "About",
+        element: <AboutPage />,
     },
     {
-        link: "/score",
-        label: "Score",
-        element: <ScorePage />,
+        link: "/feature",
+        label: "Feature",
+        element: <Feature />,
     },
 ];
