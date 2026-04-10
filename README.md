@@ -1,5 +1,5 @@
 # Advanced React Starter Template
-#hihihi - amanda
+
 A Trends in Web Development Starter Template.
 
 This template is appropriate for:

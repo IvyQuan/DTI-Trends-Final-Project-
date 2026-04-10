@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Score = () => {
+const Feature = () => {
     const [count, setCount] = useState(0);
 
     return (
@@ -14,4 +14,4 @@ const Score = () => {
     );
 };
 
-export default Score;
+export default Feature;
