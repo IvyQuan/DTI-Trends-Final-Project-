@@ -1,5 +1,5 @@
 # Advanced React Starter Template
-#hihihi - amanda
+
 A Trends in Web Development Starter Template.
 
 This template is appropriate for:
@@ -20,7 +20,7 @@ It also utilizes the following core libraries:
 
 -   React
 -   Vite
--   SWC
+-   SWC![alt text](image.png)
 -   TypeScript
 -   Pnpm
 
