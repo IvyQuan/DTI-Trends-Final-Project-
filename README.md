@@ -20,7 +20,7 @@ It also utilizes the following core libraries:
 
 -   React
 -   Vite
--   SWC
+-   SWC![alt text](image.png)
 -   TypeScript
 -   Pnpm
 
