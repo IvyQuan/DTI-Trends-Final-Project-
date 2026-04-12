@@ -1,6 +1,6 @@
-import AboutPage from "../pages/About";
-import Feature from "../pages/Feature";
-import HomePage from "../pages/Home";
+import JoinPage from "../pages/Join";
+import PointManagerPage from "../pages/PointManager";
+import LeaderboardPage from "../pages/Leaderboard";
 
 export const PATHS: {
     link: string;
@@ -9,17 +9,17 @@ export const PATHS: {
 }[] = [
     {
         link: "/",
-        label: "Home",
-        element: <HomePage />,
+        label: "Join",
+        element: <JoinPage />,
     },
     {
-        link: "/about",
-        label: "About",
-        element: <AboutPage />,
+        link: "/session",
+        label: "Session",
+        element: <PointManagerPage />,
     },
     {
-        link: "/feature",
-        label: "Feature",
-        element: <Feature />,
+        link: "/leaderboard",
+        label: "Leaderboard",
+        element: <LeaderboardPage />,
     },
 ];
