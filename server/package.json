@@ -1,6 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
+  "main": "index.js",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -14,4 +15,5 @@
     "cors": "^2.8.6",
     "express": "^5.2.1"
   }
+}
 }
