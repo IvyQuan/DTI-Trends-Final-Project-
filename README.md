@@ -2,6 +2,18 @@
 #hihihi - amanda try 2
 A Trends in Web Development Starter Template.
 
+
+
+# create server by cd into ur trends project then - \server
+# pnpn install 
+# node index.js
+^this is temp until we get an acc database...
+
+# create frontend by cd-ing out of the server 
+# pnpm run dev as usual
+
+
+
 This template is appropriate for:
 
 -   More complex frontends
