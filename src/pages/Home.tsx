@@ -1,14 +1,24 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
+import React from 'react';
 
 const Heading = () => <h1>Welcome to the Homepage!</h1>;
 
 interface Session {
   id: string;
   name: string;
+  winner?: string;
+  players?: string[];
+  gameId?: number;
 }
 
-const HomePage = () => {
+function HomePage() {
   const [sessions, setSessions] = useState<Session[]>([]);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/games')
+      .then(res => res.json())
+      .then(data => setSessions(data));
+  }, []);
 
   const createSession = async () => {
     // POST: Call a public test API
@@ -23,7 +33,6 @@ const HomePage = () => {
     } catch (e) {
       console.error('API Failed:', e);
     }
-
     // makes new session
     const newSession = { 
       id: Date.now().toString(), 
@@ -32,23 +41,19 @@ const HomePage = () => {
     setSessions([...sessions, newSession]);
   };
 
-
   return (
     <div>
-      <Heading />
+      <h1>Welcome to Group Game Night Organizer!</h1>
       <button onClick={createSession}>Create New Session</button>
-
-      <ul>
-        {sessions.map(s => (
-          <li key={s.id}>
-            {s.name} (ID: {s.id})
-          </li>
-        ))}
-      </ul>
+      <h2>Previous Sessions</h2>
+      {sessions.map((session: any) => (
+        <div key={session.gameId || session.id} style={{ marginLeft: '25px' }}>
+          <p style={{ fontSize: '20px' }}>{session.name} -- Winner: {session.winner}</p>
+          <p>Players: {session.players?.join(', ')}</p>
+        </div>
+      ))}
     </div>
   );
-};
-
-const HomePage = () => <h1>Welcome to the Homepage!</h1>;
+}
 
 export default HomePage;
