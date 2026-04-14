@@ -1,7 +1,6 @@
 import AboutPage from "../pages/About";
 import Feature from "../pages/Feature";
 import HomePage from "../pages/Home";
-import RemovePlayer from "../pages/RemovePlayer";
 
 
 export const PATHS: {
@@ -23,10 +22,5 @@ export const PATHS: {
         link: "/feature",
         label: "Feature",
         element: <Feature />,
-    },
-    {
-        link: "/remove-player",
-        label: "Remove Player",
-        element: <RemovePlayer />,
     },
 ];

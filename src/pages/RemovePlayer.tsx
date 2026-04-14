@@ -5,76 +5,44 @@ export default function RemovePlayerPage() {
   const { players, removePlayer } = useSession();
   const navigate = useNavigate();
 
-  if (players.length === 0) {
-    return (
-      <div style={{ padding: '2rem' }}>
-        <p>No players in session.</p>
-        <button onClick={() => navigate('/')}>Go to Join Page</button>
-      </div>
-    );
-  }
-
   return (
     <div style={{ padding: '2rem', maxWidth: '480px', margin: '0 auto' }}>
       <h1>Remove Players</h1>
 
-      <button
-        onClick={() => navigate('/session')}
-        style={{ marginBottom: '1.5rem', padding: '0.5rem 1rem' }}
-      >
-        Back to Session
-      </button>
-
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr>
-            <th style={{ textAlign: 'left', padding: '0.5rem', borderBottom: '2px solid #ccc' }}>
-              Player
-            </th>
-            <th style={{ textAlign: 'center', padding: '0.5rem', borderBottom: '2px solid #ccc' }}>
-              Points
-            </th>
-            <th style={{ textAlign: 'center', padding: '0.5rem', borderBottom: '2px solid #ccc' }}>
-              Remove
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {players.map((p) => (
-            <tr key={p.name}>
-              <td style={{ padding: '0.5rem', borderBottom: '1px solid #eee' }}>{p.name}</td>
-              <td
-                style={{
-                  padding: '0.5rem',
-                  textAlign: 'center',
-                  fontWeight: 'bold',
-                  borderBottom: '1px solid #eee',
-                  color: p.points < 0 ? '#c00' : 'inherit',
-                }}
-              >
-                {p.points}
-              </td>
-              <td style={{ padding: '0.5rem', textAlign: 'center', borderBottom: '1px solid #eee' }}>
+      {players.length === 0 ? (
+        <p>No players in session.</p>
+      ) : (
+        <>
+          <h3>Players in this session ({players.length})</h3>
+          <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 1rem' }}>
+            {players.map((p) => (
+              <li key={p.name} style={{ padding: '0.25rem 0' }}>
+                {p.name}
                 <button
-                  onClick={() => {
-                    if (confirm(`Remove ${p.name}?`)) removePlayer(p.name);
-                  }}
-                  style={{
-                    padding: '0.25rem 0.75rem',
-                    background: '#c53030',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                  }}
+                  onClick={() => removePlayer(p.name)}
+                  style={{ marginLeft: '0.5rem', padding: '0.25rem 0.5rem' }}
                 >
                   Remove
                 </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      <button
+        onClick={() => navigate('/')}
+        style={{ padding: '0.5rem 1rem', marginRight: '0.5rem' }}
+      >
+        Back to Join
+      </button>
+      <button
+        onClick={() => navigate('/session')}
+        disabled={players.length === 0}
+        style={{ padding: '0.5rem 1rem' }}
+      >
+        Go to Session
+      </button>
     </div>
   );
 }
