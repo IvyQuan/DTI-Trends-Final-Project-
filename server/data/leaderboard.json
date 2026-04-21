@@ -1,5 +1,6 @@
 [
   {
+<<<<<<< Updated upstream
     "name": "test",
     "points": 6
   },
@@ -14,5 +15,17 @@
   {
     "name": "test 3",
     "points": 1
+=======
+    "name": "A",
+    "points": 1
+  },
+  {
+    "name": "B",
+    "points": 8
+  },
+  {
+    "name": "C",
+    "points": 10
+>>>>>>> Stashed changes
   }
 ]

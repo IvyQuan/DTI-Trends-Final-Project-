@@ -18,23 +18,35 @@ function writeLeaderboard(data) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
 }
 
+<<<<<<< Updated upstream
 // GET /api/leaderboard — returns all entries sorted highest to lowest
+=======
+// GET /api/leaderboard — sorted highest to lowest
+>>>>>>> Stashed changes
 router.get('/', (req, res) => {
   const entries = readLeaderboard();
   entries.sort((a, b) => b.points - a.points);
   res.json(entries);
 });
 
+<<<<<<< Updated upstream
 // POST /api/leaderboard/update — merges session scores into the persistent leaderboard
+=======
+// POST /api/leaderboard/update — merges session scores into persistent leaderboard
+>>>>>>> Stashed changes
 // Body: { players: [{ name: string, points: number }] }
 router.post('/update', (req, res) => {
   const { players } = req.body;
   if (!Array.isArray(players)) {
     return res.status(400).json({ error: 'players must be an array' });
   }
+<<<<<<< Updated upstream
 
   const entries = readLeaderboard();
 
+=======
+  const entries = readLeaderboard();
+>>>>>>> Stashed changes
   for (const player of players) {
     const existing = entries.find(
       (e) => e.name.toLowerCase() === player.name.toLowerCase()
@@ -45,7 +57,10 @@ router.post('/update', (req, res) => {
       entries.push({ name: player.name, points: player.points });
     }
   }
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
   writeLeaderboard(entries);
   res.json({ success: true });
 });
