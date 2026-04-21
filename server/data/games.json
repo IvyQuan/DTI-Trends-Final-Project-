@@ -77,5 +77,20 @@
     ],
     "winner": "b",
     "date": "2026-04-21"
+  },
+  {
+    "gameId": 6,
+    "name": "Game Night – 4/20/26",
+    "players": [
+      "a"
+    ],
+    "scores": [
+      {
+        "name": "a",
+        "points": 4
+      }
+    ],
+    "winner": "a",
+    "date": "2026-04-21"
   }
 ]

@@ -1,6 +1,3 @@
-<<<<<<< Updated upstream
-const HomePage = () => <h1>Welcome to the Homepage!</h1>;
-=======
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -51,6 +48,5 @@ function HomePage() {
     </div>
   );
 }
->>>>>>> Stashed changes
 
 export default HomePage;

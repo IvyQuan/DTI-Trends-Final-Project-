@@ -20,10 +20,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const addPlayer = (name: string): boolean => {
     const trimmed = name.trim();
     if (!trimmed) return false;
-<<<<<<< Updated upstream
-=======
     if (players.length >= 5) return false;
->>>>>>> Stashed changes
     const isDuplicate = players.some(
       (p) => p.name.toLowerCase() === trimmed.toLowerCase()
     );
