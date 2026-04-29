@@ -1,48 +1,55 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+
+const Heading = () => <h1>Welcome to the Homepage!</h1>;
 
 interface Session {
-  gameId?: number;
-  id?: string;
+  id: string;
   name: string;
   winner?: string;
   players?: string[];
+  gameId?: number;
 }
 
 function HomePage() {
   const [sessions, setSessions] = useState<Session[]>([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('/api/games')
-      .then((res) => res.json())
-      .then((data) => setSessions(data))
-      .catch(() => {});
+    fetch('http://localhost:5000/api/games')
+      .then(res => res.json())
+      .then(data => setSessions(data));
   }, []);
 
+  const createSession = async () => {
+    // POST: Call a public test API
+    try {
+      const response = await fetch('https://typicode.com', {
+        method: 'POST',
+        body: JSON.stringify({ title: 'New Session' }),
+        headers: { 'Content-type': 'application/json' },
+      });
+      const data = await response.json();
+      console.log('API Success:', data);
+    } catch (e) {
+      console.error('API Failed:', e);
+    }
+    // makes new session
+    const newSession = { 
+      id: Date.now().toString(), 
+      name: `Session ${sessions.length + 1}` 
+    };
+    setSessions([...sessions, newSession]);
+  };
+
   return (
-    <div style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
-      <h1>Group Game Night Organizer</h1>
-
-      <button
-        onClick={() => navigate('/join')}
-        style={{ padding: '0.75rem 1.5rem', fontSize: '1rem', marginBottom: '2rem' }}
-      >
-        Create New Session
-      </button>
-
+    <div>
+      <h1>Welcome to Group Game Night Organizer!</h1>
+      <button onClick={createSession}>Create New Session</button>
       <h2>Previous Sessions</h2>
-      {sessions.length === 0 && <p style={{ color: '#888' }}>No previous sessions yet.</p>}
-      {sessions.map((session) => (
-        <div key={session.gameId ?? session.id} style={{ marginBottom: '1rem', padding: '0.75rem', border: '1px solid #eee', borderRadius: '6px' }}>
-          <p style={{ margin: '0 0 0.25rem', fontWeight: 'bold', fontSize: '1.05rem' }}>
-            {session.name} {session.winner && `— Winner: ${session.winner}`}
-          </p>
-          {session.players && (
-            <p style={{ margin: 0, color: '#666', fontSize: '0.9rem' }}>
-              Players: {session.players.join(', ')}
-            </p>
-          )}
+      {sessions.map((session: any) => (
+        <div key={session.gameId || session.id} style={{ marginLeft: '25px' }}>
+          <p style={{ fontSize: '20px' }}>{session.name} -- Winner: {session.winner}</p>
+          <p>Players: {session.players?.join(', ')}</p>
         </div>
       ))}
     </div>

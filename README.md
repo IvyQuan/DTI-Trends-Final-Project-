@@ -37,13 +37,15 @@ It also utilizes the following core libraries:
 
 -   React
 -   Vite
--   SWC
+-   SWC![alt text](image.png)
 -   TypeScript
 -   Pnpm
 
 ## Development
 
 ### Setup
+# does this work
+# test test this is brooke
 
 First, run `pnpm install` to install all dependencies.
 
