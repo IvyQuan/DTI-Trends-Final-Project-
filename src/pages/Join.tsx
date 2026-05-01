@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useSession } from '../context/SessionContext';
 
 export default function JoinPage() {
-  const { players, addPlayer } = useSession();
+  const { players, addPlayer, removePlayer } = useSession();
   const [nameInput, setNameInput] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleAdd = () => {
-    const trimmed = nameInput.trim();
+        const trimmed = nameInput.trim();
     if (!trimmed) { setError('Enter a name.'); return; }
     if (players.length >= 5) { setError('Maximum 5 players.'); return; }
     const success = addPlayer(trimmed);
@@ -19,6 +19,10 @@ export default function JoinPage() {
       setNameInput('');
       setError('');
     }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') handleAdd();
   };
 
   return (
@@ -52,7 +56,15 @@ export default function JoinPage() {
           <h3>Players ({players.length}/5)</h3>
           <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 1rem' }}>
             {players.map((p) => (
-              <li key={p.name} style={{ padding: '0.25rem 0' }}>• {p.name}</li>
+              <li key={p.name} style={{ padding: '0.25rem 0' }}>
+                {p.name}
+                <button
+                  onClick={() => removePlayer(p.name)}
+                  style={{ marginLeft: '0.5rem', padding: '0.25rem 0.5rem' }}
+                >
+                  Remove
+                </button>
+              </li>
             ))}
           </ul>
         </>
