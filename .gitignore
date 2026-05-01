@@ -23,4 +23,4 @@ dist-ssr
 *.sln
 *.sw?
 
-service_account.json
+server/service_account.json
