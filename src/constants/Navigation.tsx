@@ -1,6 +1,7 @@
-import AboutPage from "../pages/About";
-import Feature from "../pages/Feature";
 import HomePage from "../pages/Home";
+import JoinPage from "../pages/Join";
+import GamePage from "../pages/Game";
+import LeaderboardPage from "../pages/Leaderboard";
 
 export const PATHS: {
     link: string;
@@ -13,13 +14,18 @@ export const PATHS: {
         element: <HomePage />,
     },
     {
-        link: "/about",
-        label: "About",
-        element: <AboutPage />,
+        link: "/join",
+        label: "Join",
+        element: <JoinPage />,
     },
     {
-        link: "/feature",
-        label: "Feature",
-        element: <Feature />,
+        link: "/game",
+        label: "Game",
+        element: <GamePage />,
+    },
+    {
+        link: "/leaderboard",
+        label: "Leaderboard",
+        element: <LeaderboardPage />,
     },
 ];

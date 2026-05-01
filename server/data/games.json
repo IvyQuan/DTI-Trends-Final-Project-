@@ -1,0 +1,96 @@
+[
+  {
+    "gameId": 1,
+    "name": "Session 22",
+    "players": [
+      "Player 1",
+      "Player 2"
+    ],
+    "winner": "Player 1",
+    "date": "2026-04-01"
+  },
+  {
+    "gameId": 2,
+    "name": "3/12/26",
+    "players": [
+      "Player 5",
+      "Player e",
+      "Janice"
+    ],
+    "winner": "Janice",
+    "date": "2026-03-12"
+  },
+  {
+    "gameId": 3,
+    "name": "Fun Game",
+    "players": [
+      "Esha",
+      "Ivy",
+      "Matias",
+      "Amanda",
+      "Brooke"
+    ],
+    "winner": "Amanda",
+    "date": "2026-04-12"
+  },
+  {
+    "gameId": 4,
+    "name": "Game Night – 4/20/26",
+    "players": [
+      "a",
+      "b",
+      "c"
+    ],
+    "scores": [
+      {
+        "name": "a",
+        "points": 0
+      },
+      {
+        "name": "b",
+        "points": 1
+      },
+      {
+        "name": "c",
+        "points": 3
+      }
+    ],
+    "winner": "c",
+    "date": "2026-04-21"
+  },
+  {
+    "gameId": 5,
+    "name": "Game Night – 4/20/26",
+    "players": [
+      "a",
+      "b"
+    ],
+    "scores": [
+      {
+        "name": "a",
+        "points": 0
+      },
+      {
+        "name": "b",
+        "points": 3
+      }
+    ],
+    "winner": "b",
+    "date": "2026-04-21"
+  },
+  {
+    "gameId": 6,
+    "name": "Game Night – 4/20/26",
+    "players": [
+      "a"
+    ],
+    "scores": [
+      {
+        "name": "a",
+        "points": 4
+      }
+    ],
+    "winner": "a",
+    "date": "2026-04-21"
+  }
+]
