@@ -13,7 +13,7 @@ import {
 } from "@mantine/core";
 
 export default function JoinPage() {
-  const { players, addPlayer, removePLayer } = useSession();
+  const { players, addPlayer, removePlayer } = useSession();
   const [nameInput, setNameInput] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
