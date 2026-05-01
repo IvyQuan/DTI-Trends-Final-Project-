@@ -10,6 +10,7 @@ interface SessionContextType {
   addPlayer: (name: string) => boolean;
   updatePoints: (name: string, delta: number) => void;
   clearSession: () => void;
+  removePlayer: (name: string) => void;
 }
 
 const SessionContext = createContext<SessionContextType | null>(null);
@@ -36,11 +37,19 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
   const clearSession = () => setPlayers([]);
 
+  const removePlayer = (name: string) => {
+    setPlayers((prev) =>
+      prev.filter((p) => p.name.toLowerCase() !== name.toLowerCase())
+    );
+  };
+
   return (
-    <SessionContext.Provider value={{ players, addPlayer, updatePoints, clearSession }}>
+    <SessionContext.Provider value={{ players, addPlayer, updatePoints, clearSession, removePlayer }}>
       {children}
     </SessionContext.Provider>
   );
+
+  
 }
 
 export function useSession() {
@@ -48,3 +57,5 @@ export function useSession() {
   if (!ctx) throw new Error('useSession must be used within SessionProvider');
   return ctx;
 }
+
+

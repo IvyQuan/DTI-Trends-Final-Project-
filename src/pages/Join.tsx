@@ -13,7 +13,7 @@ import {
 } from "@mantine/core";
 
 export default function JoinPage() {
-  const { players, addPlayer } = useSession();
+  const { players, addPlayer, removePLayer } = useSession();
   const [nameInput, setNameInput] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -31,6 +31,10 @@ export default function JoinPage() {
       setNameInput("");
       setError("");
     }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') handleAdd();
   };
 
   return (
@@ -127,6 +131,12 @@ export default function JoinPage() {
                       style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                     >
                       • {p.name}
+                        <button
+                  onClick={() => removePlayer(p.name)}
+                  style={{ marginLeft: '0.5rem', padding: '0.25rem 0.5rem' }}
+                >
+                  Remove
+                </button>
                     </Text>
                   ))}
                 </Stack>

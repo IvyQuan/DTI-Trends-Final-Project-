@@ -10,6 +10,7 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { ArrowUpCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -75,20 +76,18 @@ export function HeaderSimple({ links }: HeaderSimpleProps) {
     const [opened, { toggle }] = useDisclosure(false);
     const [active, setActive] = useState(links[0].link);
     const { classes, cx } = useStyles();
+    const location = useLocation();
 
     const items = links.map((link) => (
-        <Link
-            key={link.label}
-            to={link.link}
-            className={cx(classes.link, {
-                [classes.linkActive]: active === link.link,
-            })}
-            onClick={(event) => {
-                setActive(link.link);
-            }}
-        >
-            {link.label}
-        </Link>
+    <Link
+        key={link.label}
+        to={link.link}
+        className={cx(classes.link, {
+            [classes.linkActive]: location.pathname === link.link,
+        })}
+    >
+        {link.label}
+    </Link>
     ));
 
     return (
