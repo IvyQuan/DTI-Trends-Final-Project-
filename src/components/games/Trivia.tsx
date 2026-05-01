@@ -20,13 +20,27 @@ const QUESTIONS = [
 
 export default function Trivia() {
   const [qIndex, setQIndex] = useState(() => Math.floor(Math.random() * QUESTIONS.length));
+const [used, setUsed] = useState<Set<number>>(() => new Set());
   const [revealed, setRevealed] = useState(false);
 
   const q = QUESTIONS[qIndex];
 
   const nextQuestion = () => {
-    setQIndex(Math.floor(Math.random() * QUESTIONS.length));
-    setRevealed(false);
+  const remaining = QUESTIONS
+    .map((_, i) => i)
+    .filter(i => !used.has(i) && i !== qIndex);
+
+  if (remaining.length === 0) {
+    const fresh = QUESTIONS.map((_, i) => i).filter(i => i !== qIndex);
+    const next = fresh[Math.floor(Math.random() * fresh.length)];
+    setUsed(new Set([next]));
+    setQIndex(next);
+  } else {
+    const next = remaining[Math.floor(Math.random() * remaining.length)];
+    setUsed(prev => new Set(prev).add(next));
+    setQIndex(next);
+  }
+  setRevealed(false);
   };
 
   return (
