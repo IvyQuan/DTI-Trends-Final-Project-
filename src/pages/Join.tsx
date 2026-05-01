@@ -131,12 +131,17 @@ export default function JoinPage() {
                       style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                     >
                       • {p.name}
-                        <button
-                  onClick={() => removePlayer(p.name)}
-                  style={{ marginLeft: '0.5rem', padding: '0.25rem 0.5rem' }}
-                >
-                  Remove
-                </button>
+                        <Button
+                      onClick={() => removePlayer(p.name)}
+                      size="xs"
+                      radius="xl"
+                      variant="outline"
+                      color="red"
+                      ml="sm"
+                      style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600 }}
+                    >
+                      Remove
+                    </Button>
                     </Text>
                   ))}
                 </Stack>
