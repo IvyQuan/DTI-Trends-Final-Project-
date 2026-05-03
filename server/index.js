@@ -1,5 +1,5 @@
 require('dotenv').config();
-console.log(process.env.FIREBASE_PROJECT_ID);
+//console.log(process.env.FIREBASE_PROJECT_ID);
 
 const express = require('express');
 const cors = require('cors');
