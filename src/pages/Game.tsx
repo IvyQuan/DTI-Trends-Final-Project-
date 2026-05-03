@@ -8,11 +8,14 @@ import Pictionary from '../components/games/Pictionary';
 
 type MinigameKey = 'wavelength' | 'twotruthsonelie' | 'trivia' | 'pictionary';
 
-const MINIGAMES: { key: MinigameKey; name: string; description: string; emoji: string }[] = [
-  { key: 'wavelength', name: 'Wavelength', description: 'Give a clue on a hidden spectrum. +2 exact, +1 adjacent.', emoji: '🌊' },
-  { key: 'twotruthsonelie', name: 'Two Truths One Lie', description: 'Fool others with your lie. Points for tricking people.', emoji: '🤥' },
-  { key: 'trivia', name: 'Trivia', description: 'First to answer correctly gets +2 points.', emoji: '🧠' },
-  { key: 'pictionary', name: 'Pictionary', description: 'Describe a word without saying it. Guesser +2, describer +1.', emoji: '🎨' },
+const NEON = { cyan: "#00d4ff", pink: "#ff2d9b", purple: "#7b2fff", green: "#00ff88", orange: "#ffaa00" };
+const PLAYER_COLORS = [NEON.cyan, NEON.pink, NEON.purple, NEON.green, NEON.orange];
+
+const MINIGAMES = [
+  { key: 'wavelength'      as MinigameKey, name: 'Wavelength',        description: '+2 exact, +1 adjacent.',    emoji: '🌊', color: NEON.cyan   },
+  { key: 'twotruthsonelie' as MinigameKey, name: 'Two Truths One Lie', description: 'Fool others, earn pts.',   emoji: '🤥', color: NEON.orange },
+  { key: 'trivia'          as MinigameKey, name: 'Trivia',             description: 'First correct = +2.',      emoji: '🧠', color: NEON.pink   },
+  { key: 'pictionary'      as MinigameKey, name: 'Pictionary',         description: 'Guesser +2, describer +1.',emoji: '🎨', color: NEON.green  },
 ];
 
 const MINIGAME_COMPONENTS: Record<MinigameKey, JSX.Element> = {
@@ -31,7 +34,16 @@ export default function GamePage() {
     return (
       <div style={{ padding: '2rem' }}>
         <p>No active session.</p>
-        <button onClick={() => navigate('/')}>Go Home</button>
+        <button
+          onClick={() => navigate('/')}
+          style={{
+            background: 'none', border: `1.5px solid ${NEON.cyan}`,
+            borderRadius: '2rem', padding: '0.5rem 1.25rem',
+            color: NEON.cyan, cursor: 'pointer',
+            fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700,
+            boxShadow: `0 0 10px ${NEON.cyan}44`,
+          }}
+        >Go Home</button>
       </div>
     );
   }
@@ -39,16 +51,8 @@ export default function GamePage() {
   const handleEndGame = async () => {
     try {
       const [lbRes, gameRes] = await Promise.all([
-        fetch('/api/leaderboard/update', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ players }),
-        }),
-        fetch('/api/games', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ players }),
-        }),
+        fetch('/api/leaderboard/update', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ players }) }),
+        fetch('/api/games',              { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ players }) }),
       ]);
       if (!lbRes.ok || !gameRes.ok) throw new Error();
     } catch {
@@ -60,98 +64,138 @@ export default function GamePage() {
   };
 
   return (
-    <div>
+    <div style={{ minHeight: 'calc(100vh - 60px)', display: 'flex', flexDirection: 'column' }}>
+
       {/* Scoreboard bar */}
       <div style={{
-        background: '#f8f8f8',
-        borderBottom: '2px solid #ddd',
-        padding: '1rem 2rem',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '2rem',
-        flexWrap: 'wrap',
+        background: 'rgba(255,255,255,0.03)',
+        backdropFilter: 'blur(12px)',
+        borderBottom: `1px solid ${NEON.cyan}25`,
+        padding: '0.85rem 1.5rem',
+        display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap',
       }}>
-        {players.map((p) => (
-          <div key={p.name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.2rem' }}>
-            <span style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{p.name}</span>
-            <span style={{
-              fontSize: '1.5rem',
-              fontWeight: 'bold',
-              color: p.points < 0 ? '#c00' : '#222',
-              minWidth: '2rem',
-              textAlign: 'center',
+        {players.map((p, i) => {
+          const c = PLAYER_COLORS[i % PLAYER_COLORS.length];
+          return (
+            <div key={p.name} style={{
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.2rem',
+              padding: '0.4rem 0.85rem', borderRadius: '1rem',
+              background: `${c}0e`, border: `1.5px solid ${c}35`, minWidth: 80,
             }}>
-              {p.points}
-            </span>
-            <div style={{ display: 'flex', gap: '0.2rem' }}>
-              <button onClick={() => updatePoints(p.name, -1)} style={{ padding: '0.1rem 0.6rem', cursor: 'pointer' }}>−</button>
-              <button onClick={() => updatePoints(p.name, 1)} style={{ padding: '0.1rem 0.6rem', cursor: 'pointer' }}>+</button>
+              <span style={{
+                fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700,
+                fontSize: '0.8rem', color: c, textShadow: `0 0 6px ${c}`,
+              }}>{p.name}</span>
+              <span style={{
+                fontFamily: "'Slackey', cursive", fontSize: '1.6rem',
+                color: p.points < 0 ? NEON.pink : '#fff',
+                textShadow: `0 0 10px ${p.points < 0 ? NEON.pink : c}66`,
+              }}>{p.points}</span>
+              <div style={{ display: 'flex', gap: '0.2rem' }}>
+                {([-1, 1] as const).map(delta => (
+                  <button
+                    key={delta}
+                    onClick={() => updatePoints(p.name, delta)}
+                    style={{
+                      width: 24, height: 24, borderRadius: '50%',
+                      border: `1.5px solid ${c}60`, background: `${c}15`,
+                      color: c, cursor: 'pointer', fontWeight: 700, fontSize: '0.9rem',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontFamily: "'Space Grotesk', sans-serif", padding: 0,
+                      boxShadow: 'none', transition: 'all 0.15s',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.background = `${c}35`; e.currentTarget.style.boxShadow = `0 0 8px ${c}`; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = `${c}15`; e.currentTarget.style.boxShadow = 'none'; }}
+                  >
+                    {delta === -1 ? '−' : '+'}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         <button
           onClick={handleEndGame}
           style={{
-            marginLeft: 'auto',
-            padding: '0.6rem 1.25rem',
-            background: '#771212',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            fontSize: '1rem',
+            marginLeft: 'auto', padding: '0.55rem 1.25rem', borderRadius: '2rem',
+            border: `2px solid ${NEON.pink}`, background: `${NEON.pink}18`,
+            color: NEON.pink, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700,
+            fontSize: '0.9rem', cursor: 'pointer', letterSpacing: '0.05em',
+            boxShadow: `0 0 14px ${NEON.pink}44`, textShadow: `0 0 6px ${NEON.pink}`,
+            transition: 'all 0.2s',
           }}
-        >
-          End Game
-        </button>
+          onMouseEnter={e => { e.currentTarget.style.background = `${NEON.pink}30`; e.currentTarget.style.boxShadow = `0 0 24px ${NEON.pink}88`; }}
+          onMouseLeave={e => { e.currentTarget.style.background = `${NEON.pink}18`; e.currentTarget.style.boxShadow = `0 0 14px ${NEON.pink}44`; }}
+        >End Game</button>
       </div>
 
       {/* Minigame area */}
-      <div style={{ padding: '2rem' }}>
+      <div style={{ flex: 1, padding: '2rem 1.5rem' }}>
         {activeGame ? (
-          <>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <button
               onClick={() => setActiveGame(null)}
-              style={{ marginBottom: '1.5rem', padding: '0.4rem 1rem', cursor: 'pointer' }}
-            >
-              ← Back to games
-            </button>
+              style={{
+                alignSelf: 'flex-start', background: 'none',
+                border: `1.5px solid rgba(255,255,255,0.2)`, borderRadius: '2rem',
+                color: 'rgba(255,255,255,0.5)', fontFamily: "'Space Grotesk', sans-serif",
+                padding: '0.4rem 1rem', cursor: 'pointer', fontSize: '0.85rem',
+                transition: 'all 0.15s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; }}
+            >← Back to games</button>
             {MINIGAME_COMPONENTS[activeGame]}
-          </>
+          </div>
         ) : (
-          <>
-            <h2 style={{ marginTop: 0 }}>Choose a Minigame</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <h2 style={{
+              margin: 0, fontFamily: "'Slackey', cursive", fontSize: '1.5rem',
+              color: '#fff', textShadow: `0 0 14px ${NEON.cyan}66`,
+            }}>Choose a Minigame</h2>
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-              gap: '1rem',
-              maxWidth: '700px',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+              gap: '1rem', maxWidth: 760,
             }}>
-              {MINIGAMES.map((game) => (
+              {MINIGAMES.map(game => (
                 <button
                   key={game.key}
                   onClick={() => setActiveGame(game.key)}
                   style={{
-                    padding: '1.25rem',
-                    border: '2px solid #ddd',
-                    borderRadius: '8px',
-                    background: 'white',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    transition: 'border-color 0.15s',
+                    padding: '1.5rem 1rem', border: `2px solid ${game.color}35`,
+                    borderRadius: '1rem', background: `${game.color}08`,
+                    cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s',
+                    boxShadow: 'none',
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#888')}
-                  onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#ddd')}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.border = `2px solid ${game.color}`;
+                    e.currentTarget.style.background = `${game.color}18`;
+                    e.currentTarget.style.boxShadow = `0 0 24px ${game.color}44`;
+                    e.currentTarget.style.transform = 'translateY(-3px)';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.border = `2px solid ${game.color}35`;
+                    e.currentTarget.style.background = `${game.color}08`;
+                    e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
                 >
-                  <div style={{ fontSize: '2rem' }}>{game.emoji}</div>
-                  <div style={{ fontWeight: 'bold', marginTop: '0.5rem' }}>{game.name}</div>
-                  <div style={{ fontSize: '0.85rem', color: '#666', marginTop: '0.25rem' }}>{game.description}</div>
+                  <div style={{ fontSize: '2.2rem', filter: `drop-shadow(0 0 6px ${game.color})` }}>{game.emoji}</div>
+                  <div style={{
+                    fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700,
+                    marginTop: '0.6rem', color: game.color,
+                    textShadow: `0 0 8px ${game.color}88`,
+                  }}>{game.name}</div>
+                  <div style={{
+                    fontFamily: "'Space Grotesk', sans-serif", fontSize: '0.8rem',
+                    color: 'rgba(255,255,255,0.4)', marginTop: '0.25rem',
+                  }}>{game.description}</div>
                 </button>
               ))}
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>

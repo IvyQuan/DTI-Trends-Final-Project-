@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+const NEON = { cyan: "#00d4ff", pink: "#ff2d9b", green: "#00ff88" };
+
 const QUESTIONS = [
   { question: 'What is the capital of Australia?', options: ['Sydney', 'Melbourne', 'Canberra', 'Brisbane'], answer: 2 },
   { question: 'How many sides does a hexagon have?', options: ['5', '6', '7', '8'], answer: 1 },
@@ -20,61 +22,71 @@ const QUESTIONS = [
 
 export default function Trivia() {
   const [qIndex, setQIndex] = useState(() => Math.floor(Math.random() * QUESTIONS.length));
-const [used, setUsed] = useState<Set<number>>(() => new Set());
+  const [used, setUsed] = useState<Set<number>>(() => new Set());
   const [revealed, setRevealed] = useState(false);
 
   const q = QUESTIONS[qIndex];
 
   const nextQuestion = () => {
-  const remaining = QUESTIONS
-    .map((_, i) => i)
-    .filter(i => !used.has(i) && i !== qIndex);
-
-  if (remaining.length === 0) {
-    const fresh = QUESTIONS.map((_, i) => i).filter(i => i !== qIndex);
-    const next = fresh[Math.floor(Math.random() * fresh.length)];
-    setUsed(new Set([next]));
-    setQIndex(next);
-  } else {
-    const next = remaining[Math.floor(Math.random() * remaining.length)];
-    setUsed(prev => new Set(prev).add(next));
-    setQIndex(next);
-  }
-  setRevealed(false);
+    const remaining = QUESTIONS.map((_, i) => i).filter(i => !used.has(i) && i !== qIndex);
+    if (remaining.length === 0) {
+      const fresh = QUESTIONS.map((_, i) => i).filter(i => i !== qIndex);
+      const next = fresh[Math.floor(Math.random() * fresh.length)];
+      setUsed(new Set([next])); setQIndex(next);
+    } else {
+      const next = remaining[Math.floor(Math.random() * remaining.length)];
+      setUsed(prev => new Set(prev).add(next)); setQIndex(next);
+    }
+    setRevealed(false);
   };
 
   return (
-    <div style={{ maxWidth: '500px' }}>
-      <h2>🧠 Trivia</h2>
-      <p>Read the question aloud. First player to buzz in and answer correctly gets <strong>+2 pts</strong>.</p>
+    <div style={{ maxWidth: 520, fontFamily: "'Space Grotesk', sans-serif" }}>
+      <h2 style={{ fontFamily: "'Slackey', cursive", color: "#fff", textShadow: `0 0 14px ${NEON.pink}88`, fontSize: "1.5rem", margin: "0 0 0.4rem" }}>
+        🧠 Trivia
+      </h2>
+      <p style={{ color: "rgba(255,255,255,0.45)", fontSize: "0.9rem", margin: "0 0 1rem" }}>
+        Read aloud. First to buzz in and answer correctly gets <strong style={{ color: NEON.cyan }}>+2 pts</strong>.
+      </p>
 
-      <div style={{ background: '#f0f4ff', border: '1px solid #c0c8f0', borderRadius: '8px', padding: '1.5rem', margin: '1rem 0' }}>
-        <div style={{ fontWeight: 'bold', fontSize: '1.15rem', marginBottom: '1rem' }}>{q.question}</div>
-        <ol type="A" style={{ margin: 0, paddingLeft: '1.5rem' }}>
+      <div style={{ background: `${NEON.pink}08`, border: `1.5px solid ${NEON.pink}35`, borderRadius: "1rem", padding: "1.5rem", boxShadow: `0 0 24px ${NEON.pink}18` }}>
+        <p style={{ fontWeight: 700, fontSize: "1.1rem", color: "#fff", margin: "0 0 1rem" }}>{q.question}</p>
+        <ol type="A" style={{ margin: 0, paddingLeft: "1.5rem" }}>
           {q.options.map((opt, i) => (
-            <li
-              key={i}
-              style={{
-                padding: '0.3rem 0',
-                fontWeight: revealed && i === q.answer ? 'bold' : 'normal',
-                color: revealed && i === q.answer ? '#1a7a1a' : 'inherit',
-              }}
-            >
-              {opt} {revealed && i === q.answer && '✓'}
+            <li key={i} style={{
+              padding: "0.35rem 0",
+              color: revealed && i === q.answer ? NEON.green : "rgba(255,255,255,0.7)",
+              fontWeight: revealed && i === q.answer ? 700 : 400,
+              textShadow: revealed && i === q.answer ? `0 0 8px ${NEON.green}` : "none",
+              fontSize: "0.95rem",
+            }}>
+              {opt} {revealed && i === q.answer && <span style={{ color: NEON.green }}>✓</span>}
             </li>
           ))}
         </ol>
       </div>
 
-      <div style={{ display: 'flex', gap: '0.75rem' }}>
+      <div style={{ background: `${NEON.cyan}0e`, border: `1px solid ${NEON.cyan}30`, borderRadius: "0.75rem", padding: "0.75rem 1rem", color: "rgba(255,255,255,0.5)", fontSize: "0.82rem", margin: "0.75rem 0" }}>
+        <strong style={{ color: NEON.cyan }}>Scoring:</strong> Correct buzz-in → +2 pts
+      </div>
+
+      <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
         {!revealed && (
-          <button onClick={() => setRevealed(true)} style={{ padding: '0.5rem 1.25rem' }}>
-            Reveal Answer
-          </button>
+          <button onClick={() => setRevealed(true)} style={{
+            background: `${NEON.cyan}15`, border: `1.5px solid ${NEON.cyan}50`,
+            borderRadius: "2rem", padding: "0.5rem 1.25rem",
+            color: NEON.cyan, fontFamily: "'Space Grotesk', sans-serif",
+            fontWeight: 700, fontSize: "0.9rem", cursor: "pointer",
+            boxShadow: `0 0 12px ${NEON.cyan}40`, transition: "all 0.2s",
+          }}>Reveal Answer</button>
         )}
-        <button onClick={nextQuestion} style={{ padding: '0.5rem 1.25rem' }}>
-          Next Question
-        </button>
+        <button onClick={nextQuestion} style={{
+          background: `${NEON.pink}15`, border: `1.5px solid ${NEON.pink}50`,
+          borderRadius: "2rem", padding: "0.5rem 1.25rem",
+          color: NEON.pink, fontFamily: "'Space Grotesk', sans-serif",
+          fontWeight: 700, fontSize: "0.9rem", cursor: "pointer",
+          boxShadow: `0 0 12px ${NEON.pink}40`, transition: "all 0.2s",
+        }}>Next Question →</button>
       </div>
     </div>
   );

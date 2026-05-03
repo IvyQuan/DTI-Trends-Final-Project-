@@ -64,7 +64,7 @@ const useStyles = createStyles((theme) => ({
     "&, &:hover": {
       color: "#00d4ff",
       background: "rgba(0, 212, 255, 0.10)",
-      textShadow: "0 0 10px rgba(0, 212, 255, 0.9), 0 0 24px rgba(0, 212, 255, 0.4)",
+      textShadow: "0 0 10px #00d4ffe6, 0 0 24px rgba(0, 212, 255, 0.4)",
     },
   },
 }));
