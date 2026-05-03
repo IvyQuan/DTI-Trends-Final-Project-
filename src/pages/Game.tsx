@@ -95,7 +95,7 @@ export default function GamePage() {
           style={{
             marginLeft: 'auto',
             padding: '0.6rem 1.25rem',
-            background: '#c53030',
+            background: '#771212',
             color: 'white',
             border: 'none',
             borderRadius: '4px',

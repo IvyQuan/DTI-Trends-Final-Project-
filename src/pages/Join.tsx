@@ -57,7 +57,9 @@ export default function JoinPage() {
               fontSize: "3.5rem",
               letterSpacing: "-0.01em",
               lineHeight: 1.05,
-              color: "#1e3a8a",
+              color: "#00d4ff",
+              textShadow: "0 0 10px #00d4ffe6, 0 0 24px rgba(0, 212, 255, 0.4)",
+    
             }}
           >
             Create A Session
