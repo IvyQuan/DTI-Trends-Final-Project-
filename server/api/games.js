@@ -1,13 +1,24 @@
 const express = require('express');
 const router = express.Router();
+const { db } = require('../firebase');
 
+// GET all past games
+router.get('/', async (req, res) => {
+  const snapshot = await db.collection('games').orderBy('date', 'desc').get();
+  const games = snapshot.docs.map(doc => ({ gameId: doc.id, ...doc.data() }));
+  res.json(games);
+});
 
-router.get('/', (req, res) => {
-  res.json([
-    { gameId: 1, name: 'Session 22', players: ['Player 1', 'Player 2'], winner: 'Player 1', date: '2026-04-01' },
-    { gameId: 2, name: '3/12/26', players: ['Player 5', 'Player e', 'Janice'], winner: 'Janice', date: '2026-03-12' },
-    { gameId: 3, name: 'Fun Game', players: ['Esha', 'Ivy', 'Matias', 'Amanda', 'Brooke'], winner: 'Amanda', date: '2026-04-12' }
-  ]);
+// POST save a new game when End Game is pressed
+router.post('/', async (req, res) => {
+  const { players } = req.body;
+  const winner = [...players].sort((a, b) => b.points - a.points)[0].name;
+  await db.collection('games').add({
+    players,
+    winner,
+    date: new Date().toISOString(),
+  });
+  res.json({ success: true });
 });
 
 module.exports = router;
