@@ -1,178 +1,277 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "../context/SessionContext";
-import { Stack, Text, Title, Group } from "@mantine/core";
 
-const NEON = { cyan: "#00d4ff", pink: "#ff2d9b", purple: "#7b2fff", green: "#00ff88", orange: "#ffaa00" };
-const PLAYER_COLORS = [NEON.cyan, NEON.pink, NEON.purple, NEON.green, NEON.orange];
+const MARIO = {
+  red: "#e52521",
+  yellow: "#fbd000",
+  blue: "#049cd8",
+  green: "#43b047",
+  black: "#000000",
+  cream: "#fff8e7",
+};
+
+const LETTER_COLORS = [MARIO.red, MARIO.yellow, MARIO.blue, MARIO.green];
+
+const surroundOutline = (color: string, size: number) => {
+  const offsets: string[] = [];
+  for (let x = -size; x <= size; x++) {
+    for (let y = -size; y <= size; y++) {
+      if (x === 0 && y === 0) continue;
+      offsets.push(`${x}px ${y}px 0 ${color}`);
+    }
+  }
+  return offsets.join(", ");
+};
+
+const RainbowText = ({
+  text,
+  fontSize,
+  outlineSize = 5,
+}: {
+  text: string;
+  fontSize: string;
+  outlineSize?: number;
+}) => {
+  const fontSizeValue = parseFloat(fontSize);
+  const fontSizeUnit = fontSize.replace(String(fontSizeValue), "");
+  const spaceSize = `${fontSizeValue * 0.4}${fontSizeUnit}`;
+
+  return (
+    <span style={{ display: "inline-block", whiteSpace: "nowrap" }}>
+      {text.split("").map((ch, i) => (
+        <span
+          key={i}
+          style={{
+            display: "inline-block",
+            color: ch === " " ? "transparent" : LETTER_COLORS[i % LETTER_COLORS.length],
+            textShadow: ch === " " ? "none" : surroundOutline(MARIO.black, outlineSize),
+            fontSize: ch === " " ? spaceSize : fontSize,
+            transform: ch === " " ? "none" : `translateY(${i % 2 === 0 ? -3 : 3}px)`,
+            padding: "0 0.05em",
+          }}
+        >
+          {ch === " " ? "\u00A0" : ch}
+        </span>
+      ))}
+    </span>
+  );
+};
+
+const pixelButtonStyle = (
+  bg: string,
+  fg: string,
+  disabled = false
+): React.CSSProperties => ({
+  background: disabled ? "#cccccc" : bg,
+  color: disabled ? "#888888" : fg,
+  border: `4px solid ${MARIO.black}`,
+  padding: "1rem 1.8rem",
+  fontFamily: "'Pixel Game', sans-serif",
+  fontSize: "1.4rem",
+  letterSpacing: "0.08em",
+  cursor: disabled ? "not-allowed" : "pointer",
+  boxShadow: `0 6px 0 ${MARIO.black}`,
+  textTransform: "uppercase",
+  transition: "transform 0.1s",
+  textShadow: disabled ? "none" : `2px 2px 0 ${MARIO.black}`,
+  opacity: disabled ? 0.6 : 1,
+});
 
 export default function JoinPage() {
-  const { players, addPlayer, removePlayer } = useSession();
+  const { players, addPlayer } = useSession();
   const [nameInput, setNameInput] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleAdd = () => {
     const trimmed = nameInput.trim();
-    if (!trimmed) { setError("Enter a name."); return; }
+    if (!trimmed) {
+      setError("ENTER A NAME!");
+      return;
+    }
     const success = addPlayer(trimmed);
-    if (!success) { setError("Player already added."); }
-    else { setNameInput(""); setError(""); }
+    if (!success) {
+      setError("ALREADY ADDED!");
+    } else {
+      setNameInput("");
+      setError("");
+    }
   };
 
   return (
-    <div style={{
-      minHeight: "calc(100vh - 60px)",
-      display: "flex", alignItems: "center", justifyContent: "center",
-      padding: "2rem 1rem", position: "relative", overflow: "hidden",
-    }}>
-      {/* bg orbs */}
-      <div style={{ position:"absolute", top:"-60px", left:"-60px", width:300, height:300, borderRadius:"50%", background:`radial-gradient(circle, ${NEON.cyan}14 0%, transparent 70%)`, pointerEvents:"none" }} />
-      <div style={{ position:"absolute", bottom:"-60px", right:"-60px", width:260, height:260, borderRadius:"50%", background:`radial-gradient(circle, ${NEON.pink}14 0%, transparent 70%)`, pointerEvents:"none" }} />
+    <div
+      style={{
+        minHeight: "calc(100vh - 60px)",
+        background: MARIO.cream,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "3rem 1rem",
+        fontFamily: "'PixelPurl', sans-serif",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: 640,
+          width: "100%",
+          textAlign: "center",
+        }}
+      >
+        {/* Title */}
+        <h1
+          style={{
+            fontFamily: "'Oxygene', sans-serif",
+            margin: 0,
+            lineHeight: 1.1,
+            letterSpacing: "0.04em",
+            paddingTop: "2rem",
+            paddingBottom: "2rem",
+          }}
+        >
+          <RainbowText text="NEW GAME" fontSize="6rem" outlineSize={5} />
+        </h1>
 
-      <div style={{ width: "100%", maxWidth: 440, position: "relative", zIndex: 1 }}>
-        <Stack align="center" spacing="xl">
+        {/* Tagline */}
+        <p
+          style={{
+            fontFamily: "'PixelPurl', sans-serif",
+            fontSize: "2rem",
+            color: MARIO.black,
+            margin: "1rem 0 2.5rem",
+            lineHeight: 1.2,
+          }}
+        >
+          ADD PLAYERS, THEN HIT START!
+        </p>
 
-          <Stack align="center" spacing="xs">
-            <span style={{ fontSize: "3rem", filter: `drop-shadow(0 0 10px ${NEON.cyan})` }}>🎲</span>
-            <Title order={1} align="center" style={{
-              fontFamily: "'Slackey', cursive",
-              fontSize: "clamp(2rem, 5vw, 2.8rem)",
-              color: "#fff",
-              textShadow: `0 0 18px ${NEON.cyan}, 0 0 40px ${NEON.cyan}44`,
-              lineHeight: 1.05,
-            }}>
-              Create A Session
-            </Title>
-            <Text align="center" style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              color: "rgba(255,255,255,0.4)", fontSize: "0.95rem",
-            }}>
-              Add players, then let the games begin!
-            </Text>
-          </Stack>
-
-          {/* Card */}
-          <div style={{
-            width: "100%",
-            background: "rgba(255,255,255,0.03)",
-            backdropFilter: "blur(12px)",
-            borderRadius: "1.25rem",
-            padding: "1.75rem",
-            border: `1px solid ${NEON.cyan}30`,
-            boxShadow: `0 0 32px ${NEON.cyan}18`,
-          }}>
-            <Stack spacing="md">
-              <Group spacing="sm" align="center" noWrap>
-                <input
-                  value={nameInput}
-                  onChange={e => { setNameInput(e.target.value); setError(""); }}
-                  onKeyDown={e => e.key === "Enter" && handleAdd()}
-                  placeholder="Player name"
-                  style={{
-                    flex: 1, padding: "0.65rem 1rem", borderRadius: "2rem",
-                    border: `2px solid ${NEON.cyan}40`,
-                    background: "rgba(0,212,255,0.06)",
-                    color: "#fff", fontFamily: "'Space Grotesk', sans-serif",
-                    fontSize: "1rem", outline: "none", boxShadow: "none",
-                  }}
-                />
-                <button
-                  onClick={handleAdd}
-                  style={{
-                    padding: "0.6rem 1.4rem", borderRadius: "2rem",
-                    border: `2px solid ${NEON.cyan}`,
-                    background: `${NEON.cyan}18`, color: NEON.cyan,
-                    fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700,
-                    fontSize: "0.9rem", letterSpacing: "0.05em", cursor: "pointer",
-                    boxShadow: `0 0 14px ${NEON.cyan}44`,
-                    textShadow: `0 0 6px ${NEON.cyan}`, transition: "all 0.2s",
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.background = `${NEON.cyan}28`; e.currentTarget.style.boxShadow = `0 0 24px ${NEON.cyan}88`; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = `${NEON.cyan}18`; e.currentTarget.style.boxShadow = `0 0 14px ${NEON.cyan}44`; }}
-                >
-                  Add
-                </button>
-              </Group>
-
-              {error && (
-                <Text size="sm" style={{ color: NEON.pink, fontFamily: "'Space Grotesk', sans-serif", textShadow: `0 0 6px ${NEON.pink}` }}>
-                  ⚠️ {error}
-                </Text>
-              )}
-
-              {players.length > 0 && (
-                <Stack spacing="sm">
-                  <Text style={{
-                    fontFamily: "'Space Grotesk', sans-serif",
-                    color: "rgba(255,255,255,0.3)", fontSize: "0.75rem",
-                    textTransform: "uppercase", letterSpacing: "0.1em",
-                  }}>
-                    Players — {players.length}
-                  </Text>
-                  <Stack spacing="xs">
-                    {players.map((p, i) => {
-                      const c = PLAYER_COLORS[i % PLAYER_COLORS.length];
-                      return (
-                        <div key={p.name} style={{
-                          display: "flex", alignItems: "center", justifyContent: "space-between",
-                          padding: "0.55rem 0.9rem", borderRadius: "0.75rem",
-                          background: `${c}0e`, border: `1.5px solid ${c}35`,
-                        }}>
-                          <Group spacing="sm">
-                            <div style={{
-                              width: 28, height: 28, borderRadius: "50%",
-                              background: `${c}28`, border: `2px solid ${c}`,
-                              display: "flex", alignItems: "center", justifyContent: "center",
-                              color: c, fontWeight: 700, fontSize: "0.75rem",
-                              fontFamily: "'Space Grotesk', sans-serif",
-                              boxShadow: `0 0 8px ${c}66`,
-                            }}>
-                              {p.name[0].toUpperCase()}
-                            </div>
-                            <Text weight={600} style={{ fontFamily: "'Space Grotesk', sans-serif", color: "#fff" }}>
-                              {p.name}
-                            </Text>
-                          </Group>
-                          <button
-                            onClick={() => removePlayer(p.name)}
-                            style={{
-                              background: "none", border: "none", color: "rgba(255,255,255,0.3)",
-                              cursor: "pointer", fontFamily: "'Space Grotesk', sans-serif",
-                              fontWeight: 700, fontSize: "1rem", padding: "0 0.4rem",
-                              transition: "color 0.15s", boxShadow: "none",
-                            }}
-                            onMouseEnter={e => { e.currentTarget.style.color = NEON.pink; }}
-                            onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.3)"; }}
-                          >✕</button>
-                        </div>
-                      );
-                    })}
-                  </Stack>
-                </Stack>
-              )}
-            </Stack>
-          </div>
-
-          <button
-            onClick={() => navigate("/game")}
-            disabled={players.length === 0}
+        {/* Form Panel */}
+        <div
+          style={{
+            background: MARIO.yellow,
+            border: `5px solid ${MARIO.black}`,
+            padding: "2rem 1.5rem",
+            boxShadow: `0 8px 0 ${MARIO.black}`,
+            marginBottom: "2.5rem",
+          }}
+        >
+          {/* Input row */}
+          <div
             style={{
-              width: "100%", padding: "1rem", borderRadius: "2rem",
-              border: `2px solid ${players.length === 0 ? "#333" : NEON.green}`,
-              background: players.length === 0 ? "rgba(255,255,255,0.03)" : `${NEON.green}18`,
-              color: players.length === 0 ? "#444" : NEON.green,
-              fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700,
-              fontSize: "1.05rem", letterSpacing: "0.06em", textTransform: "uppercase",
-              cursor: players.length === 0 ? "not-allowed" : "pointer",
-              boxShadow: players.length === 0 ? "none" : `0 0 24px ${NEON.green}44`,
-              textShadow: players.length === 0 ? "none" : `0 0 8px ${NEON.green}`,
-              transition: "all 0.2s",
+              display: "flex",
+              gap: "0.75rem",
+              marginBottom: "1rem",
             }}
           >
-            Start Game Night 🚀
-          </button>
-        </Stack>
+            <input
+              type="text"
+              value={nameInput}
+              onChange={(e) => {
+                setNameInput(e.target.value);
+                setError("");
+              }}
+              onKeyDown={(e) => e.key === "Enter" && handleAdd()}
+              placeholder="PLAYER NAME"
+              style={{
+                flex: 1,
+                padding: "0.75rem 1rem",
+                fontFamily: "'PixelPurl', sans-serif",
+                fontSize: "1.6rem",
+                background: MARIO.cream,
+                color: MARIO.black,
+                border: `4px solid ${MARIO.black}`,
+                outline: "none",
+                letterSpacing: "0.05em",
+                borderRadius: 0,
+              }}
+            />
+            <button
+              onClick={handleAdd}
+              style={pixelButtonStyle(MARIO.green, MARIO.cream)}
+            >
+              ADD
+            </button>
+          </div>
+
+          {error && (
+            <p
+              style={{
+                fontFamily: "'PixelPurl', sans-serif",
+                fontSize: "1.4rem",
+                color: MARIO.red,
+                background: MARIO.cream,
+                padding: "0.5rem 0.75rem",
+                margin: "0.75rem 0 0",
+                border: `3px solid ${MARIO.black}`,
+                letterSpacing: "0.05em",
+              }}
+            >
+              ! {error}
+            </p>
+          )}
+
+          {/* Player list */}
+          {players.length > 0 && (
+            <div
+              style={{
+                background: MARIO.cream,
+                border: `4px solid ${MARIO.black}`,
+                padding: "1rem 1.25rem",
+                marginTop: "1rem",
+                textAlign: "left",
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: "'Pixel Game', sans-serif",
+                  fontSize: "1.2rem",
+                  color: MARIO.black,
+                  margin: "0 0 0.75rem",
+                  letterSpacing: "0.1em",
+                  textShadow: `2px 2px 0 ${MARIO.yellow}`,
+                }}
+              >
+                PLAYERS [{players.length}]
+              </p>
+              {players.map((p, i) => (
+                <div
+                  key={p.name}
+                  style={{
+                    fontFamily: "'PixelPurl', sans-serif",
+                    fontSize: "1.5rem",
+                    color: LETTER_COLORS[i % LETTER_COLORS.length],
+                    padding: "0.25rem 0",
+                    letterSpacing: "0.05em",
+                    textShadow: `2px 2px 0 ${MARIO.black}`,
+                  }}
+                >
+                  P{i + 1} ► {p.name.toUpperCase()}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Start button */}
+        <button
+          onClick={() => navigate("/game")}
+          disabled={players.length === 0}
+          style={{
+            ...pixelButtonStyle(MARIO.red, MARIO.cream, players.length === 0),
+            fontSize: "1.8rem",
+            padding: "1.2rem 2.5rem",
+          }}
+          onMouseEnter={(e) => {
+            if (players.length > 0) {
+              e.currentTarget.style.transform = "translateY(-2px)";
+            }
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0)";
+          }}
+        >
+          ▶ START GAME
+        </button>
       </div>
     </div>
   );
