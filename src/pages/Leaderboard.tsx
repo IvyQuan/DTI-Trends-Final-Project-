@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface LeaderboardEntry {
   name: string;
-  points: number;
+  totalPoints: number;
 }
 
 export default function LeaderboardPage() {
@@ -47,8 +47,8 @@ export default function LeaderboardPage() {
               <tr key={entry.name}>
                 <td style={{ padding: '0.5rem', borderBottom: '1px solid #eee', color: '#666' }}>#{i + 1}</td>
                 <td style={{ padding: '0.5rem', borderBottom: '1px solid #eee' }}>{entry.name}</td>
-                <td style={{ padding: '0.5rem', borderBottom: '1px solid #eee', textAlign: 'right', fontWeight: 'bold', color: entry.points < 0 ? '#c00' : 'inherit' }}>
-                  {entry.points}
+                <td style={{ padding: '0.5rem', borderBottom: '1px solid #eee', textAlign: 'right', fontWeight: 'bold', color: entry.totalPoints < 0 ? '#c00' : 'inherit' }}>
+                  {entry.totalPoints}
                 </td>
               </tr>
             ))}
