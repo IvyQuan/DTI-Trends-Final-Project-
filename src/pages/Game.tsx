@@ -31,22 +31,37 @@ export default function GamePage() {
   const navigate = useNavigate();
 
   if (players.length === 0) {
-    return (
-      <div style={{ padding: '2rem' }}>
-        <p>No active session.</p>
-        <button
-          onClick={() => navigate('/')}
-          style={{
-            background: 'none', border: `1.5px solid ${NEON.cyan}`,
-            borderRadius: '2rem', padding: '0.5rem 1.25rem',
-            color: NEON.cyan, cursor: 'pointer',
-            fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700,
-            boxShadow: `0 0 10px ${NEON.cyan}44`,
-          }}
-        >Go Home</button>
-      </div>
-    );
-  }
+  return (
+    <div style={{
+      minHeight: 'calc(100vh - 60px)',
+      display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center',
+      gap: '1.5rem', textAlign: 'center', padding: '2rem',
+    }}>
+      <span style={{ fontSize: '4rem', filter: `drop-shadow(0 0 12px ${NEON.cyan})` }}>🎮</span>
+      <h2 style={{
+        fontFamily: "'Slackey', cursive", fontSize: '2rem',
+        color: '#fff', textShadow: `0 0 18px ${NEON.cyan}`,
+        margin: 0,
+      }}>No Active Session</h2>
+      <p style={{
+        fontFamily: "'Space Grotesk', sans-serif",
+        color: 'rgba(255,255,255,0.4)', fontSize: '1rem', margin: 0,
+      }}>Let's get some people in here!</p>
+      <button
+        onClick={() => navigate('/join')}
+        style={{
+          padding: '0.75rem 2rem', borderRadius: '2rem',
+          border: `2px solid ${NEON.cyan}`, background: `${NEON.cyan}18`,
+          color: NEON.cyan, fontFamily: "'Space Grotesk', sans-serif",
+          fontWeight: 700, fontSize: '1rem', cursor: 'pointer',
+          boxShadow: `0 0 18px ${NEON.cyan}44`,
+          textShadow: `0 0 8px ${NEON.cyan}`, transition: 'all 0.2s',
+        }}
+      >Go to Join →</button>
+    </div>
+  );
+}
 
   const handleEndGame = async () => {
     try {
