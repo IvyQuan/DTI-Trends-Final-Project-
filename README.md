@@ -1,6 +1,23 @@
 # Advanced React Starter Template
-
 A Trends in Web Development Starter Template.
+
+# current status
+built a temporary score tracker that adds data to a database stoed as node js on the server the code runs (see server/data/leaderboard)
+with help of lots of google and some claude, created a rudementary front end that allows a game session to be made by typing in names. the names can have points assigned in the next page. 
+We will implement games to play that then will factor into points, however for now we have a temporary blank page. The current page is to test if point adding/subtracting works. 
+End game will change the stats in the leaderboard page. This is saved to the server data, and pulled from it to display data. 
+
+# create server by cd into ur trends project then - \server
+# pnpn install 
+# node index.js
+^this is temp until we get an acc database...
+
+# create frontend by cd-ing out of the server 
+# pnpm run dev as usual
+
+
+
+
 
 This template is appropriate for:
 
