@@ -71,34 +71,10 @@ const MINIGAMES: {
   icon: string;
   color: string;
 }[] = [
-  {
-    key: "wavelength",
-    name: "WAVELENGTH",
-    description: "+2 EXACT, +1 ADJACENT",
-    icon: "≈",
-    color: MARIO.blue,
-  },
-  {
-    key: "twotruthsonelie",
-    name: "2 TRUTHS 1 LIE",
-    description: "FOOL OTHERS, EARN PTS",
-    icon: "?",
-    color: MARIO.yellow,
-  },
-  {
-    key: "trivia",
-    name: "TRIVIA",
-    description: "FIRST CORRECT = +2",
-    icon: "!",
-    color: MARIO.red,
-  },
-  {
-    key: "pictionary",
-    name: "PICTIONARY",
-    description: "GUESSER +2, DESCRIBER +1",
-    icon: "✎",
-    color: MARIO.green,
-  },
+  { key: "wavelength", name: "WAVELENGTH", description: "+2 EXACT, +1 ADJACENT", icon: "≈", color: MARIO.blue },
+  { key: "twotruthsonelie", name: "2 TRUTHS 1 LIE", description: "FOOL OTHERS, EARN PTS", icon: "?", color: MARIO.yellow },
+  { key: "trivia", name: "TRIVIA", description: "FIRST CORRECT = +2", icon: "!", color: MARIO.red },
+  { key: "pictionary", name: "PICTIONARY", description: "GUESSER +2, DESCRIBER +1", icon: "✎", color: MARIO.green },
 ];
 
 const MINIGAME_COMPONENTS: Record<MinigameKey, JSX.Element> = {
@@ -123,6 +99,17 @@ const pixelButton = (bg: string, fg: string): React.CSSProperties => ({
   transition: "transform 0.1s",
 });
 
+// Square pattern 
+const squarePattern = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='75' height='75' viewBox='0 0 75 75'><rect x='27' y='27' width='25' height='25' fill='%236895b5' opacity='0.5'/></svg>")`;
+
+const pageBackgroundStyle: React.CSSProperties = {
+  background: "#a8c5d8",
+  backgroundImage: squarePattern,
+  backgroundRepeat: "repeat",
+  backgroundSize: "75px 75px",
+  animation: "drift 20s linear infinite",
+};
+
 export default function GamePage() {
   const { players, updatePoints, clearSession } = useSession();
   const [activeGame, setActiveGame] = useState<MinigameKey | null>(null);
@@ -133,7 +120,7 @@ export default function GamePage() {
       <div
         style={{
           minHeight: "calc(100vh - 60px)",
-          background: MARIO.cream,
+          ...pageBackgroundStyle,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -144,39 +131,21 @@ export default function GamePage() {
           textAlign: "center",
         }}
       >
-        <h2
-          style={{
-            fontFamily: "'Oxygene', sans-serif",
-            margin: 0,
-            lineHeight: 1.2,
-            paddingTop: "2rem",
-            paddingBottom: "2rem",
-          }}
-        >
+        <h2 style={{ fontFamily: "'Oxygene', sans-serif", margin: 0, lineHeight: 1.2, paddingTop: "2rem", paddingBottom: "2rem" }}>
           <RainbowText text="NO PARTY!" fontSize="5rem" outlineSize={5} />
         </h2>
-        <p
-          style={{
-            fontFamily: "'PixelPurl', sans-serif",
-            fontSize: "2rem",
-            color: MARIO.black,
-            margin: 0,
-          }}
-        >
+        <p style={{ fontFamily: "'PixelPurl', sans-serif", fontSize: "2rem", color: MARIO.black, margin: 0 }}>
           ASSEMBLE YOUR PLAYERS FIRST
         </p>
         <button
           onClick={() => navigate("/join")}
           style={pixelButton(MARIO.red, MARIO.cream)}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "translateY(-2px)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = "translateY(0)";
-          }}
+          onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
         >
           ▶ NEW GAME
         </button>
+        <style>{`@keyframes drift { from { background-position: 0 0; } to { background-position: 75px 0; } }`}</style>
       </div>
     );
   }
@@ -208,11 +177,10 @@ export default function GamePage() {
     <div
       style={{
         minHeight: "calc(100vh - 60px)",
-        background: MARIO.cream,
+        ...pageBackgroundStyle,
         fontFamily: "'PixelPurl', sans-serif",
       }}
     >
-      {/* Scoreboard bar */}
       <div
         style={{
           background: MARIO.blue,
@@ -241,89 +209,37 @@ export default function GamePage() {
                 boxShadow: `0 4px 0 ${MARIO.black}`,
               }}
             >
-              <span
-                style={{
-                  fontFamily: "'Pixel Game', sans-serif",
-                  fontSize: "0.95rem",
-                  color: MARIO.cream,
-                  letterSpacing: "0.05em",
-                  textShadow: `2px 2px 0 ${MARIO.black}`,
-                }}
-              >
+              <span style={{ fontFamily: "'Pixel Game', sans-serif", fontSize: "0.95rem", color: MARIO.cream, letterSpacing: "0.05em", textShadow: `2px 2px 0 ${MARIO.black}` }}>
                 {p.name.toUpperCase()}
               </span>
-              <span
-                style={{
-                  fontFamily: "'Oxygene', sans-serif",
-                  fontSize: "2rem",
-                  color: p.points < 0 ? MARIO.black : MARIO.cream,
-                  lineHeight: 1,
-                  textShadow: `3px 3px 0 ${MARIO.black}`,
-                }}
-              >
+              <span style={{ fontFamily: "'Oxygene', sans-serif", fontSize: "2rem", color: p.points < 0 ? MARIO.black : MARIO.cream, lineHeight: 1, textShadow: `3px 3px 0 ${MARIO.black}` }}>
                 {p.points}
               </span>
               <div style={{ display: "flex", gap: "0.3rem" }}>
                 <button
                   onClick={() => updatePoints(p.name, -1)}
-                  style={{
-                    width: 28,
-                    height: 28,
-                    background: MARIO.cream,
-                    color: MARIO.black,
-                    border: `3px solid ${MARIO.black}`,
-                    fontFamily: "'Pixel Game', sans-serif",
-                    fontSize: "1.1rem",
-                    cursor: "pointer",
-                    padding: 0,
-                    fontWeight: "bold",
-                  }}
-                >
-                  −
-                </button>
+                  style={{ width: 28, height: 28, background: MARIO.cream, color: MARIO.black, border: `3px solid ${MARIO.black}`, fontFamily: "'Pixel Game', sans-serif", fontSize: "1.1rem", cursor: "pointer", padding: 0, fontWeight: "bold" }}
+                >−</button>
                 <button
                   onClick={() => updatePoints(p.name, 1)}
-                  style={{
-                    width: 28,
-                    height: 28,
-                    background: MARIO.cream,
-                    color: MARIO.black,
-                    border: `3px solid ${MARIO.black}`,
-                    fontFamily: "'Pixel Game', sans-serif",
-                    fontSize: "1.1rem",
-                    cursor: "pointer",
-                    padding: 0,
-                    fontWeight: "bold",
-                  }}
-                >
-                  +
-                </button>
+                  style={{ width: 28, height: 28, background: MARIO.cream, color: MARIO.black, border: `3px solid ${MARIO.black}`, fontFamily: "'Pixel Game', sans-serif", fontSize: "1.1rem", cursor: "pointer", padding: 0, fontWeight: "bold" }}
+                >+</button>
               </div>
             </div>
           );
         })}
 
-        <button
-          onClick={handleEndGame}
-          style={{
-            ...pixelButton(MARIO.red, MARIO.cream),
-            marginLeft: "auto",
-          }}
-        >
+        <button onClick={handleEndGame} style={{ ...pixelButton(MARIO.red, MARIO.cream), marginLeft: "auto" }}>
           END GAME
         </button>
       </div>
 
-      {/* Minigame area */}
       <div style={{ padding: "2rem 1.5rem" }}>
         {activeGame ? (
           <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
             <button
               onClick={() => setActiveGame(null)}
-              style={{
-                ...pixelButton(MARIO.yellow, MARIO.black),
-                alignSelf: "flex-start",
-              }}
+              style={{ ...pixelButton(MARIO.yellow, MARIO.black), alignSelf: "flex-start" }}
             >
               ◀ BACK
             </button>
@@ -331,27 +247,10 @@ export default function GamePage() {
           </div>
         ) : (
           <div>
-            <h2
-              style={{
-                fontFamily: "'Oxygene', sans-serif",
-                margin: "0 0 2rem",
-                lineHeight: 1.2,
-                paddingTop: "1rem",
-                paddingBottom: "1rem",
-                textAlign: "center",
-              }}
-            >
+            <h2 style={{ fontFamily: "'Oxygene', sans-serif", margin: "0 0 2rem", lineHeight: 1.2, paddingTop: "1rem", paddingBottom: "1rem", textAlign: "center" }}>
               <RainbowText text="PICK A GAME" fontSize="3.5rem" outlineSize={4} />
             </h2>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-                gap: "1.5rem",
-                maxWidth: 900,
-                margin: "0 auto",
-              }}
-            >
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "1.5rem", maxWidth: 900, margin: "0 auto" }}>
               {MINIGAMES.map((game) => (
                 <button
                   key={game.key}
@@ -366,46 +265,16 @@ export default function GamePage() {
                     boxShadow: `0 8px 0 ${MARIO.black}`,
                     transition: "transform 0.1s",
                   }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-3px)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "translateY(0)";
-                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-3px)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
                 >
-                  <div
-                    style={{
-                      fontFamily: "'Pixel Game', sans-serif",
-                      fontSize: "3.5rem",
-                      color: MARIO.cream,
-                      lineHeight: 1,
-                      marginBottom: "0.5rem",
-                      textShadow: `3px 3px 0 ${MARIO.black}`,
-                    }}
-                  >
+                  <div style={{ fontFamily: "'Pixel Game', sans-serif", fontSize: "3.5rem", color: MARIO.cream, lineHeight: 1, marginBottom: "0.5rem", textShadow: `3px 3px 0 ${MARIO.black}` }}>
                     {game.icon}
                   </div>
-                  <div
-                    style={{
-                      fontFamily: "'Pixel Game', sans-serif",
-                      fontSize: "1.1rem",
-                      color: MARIO.cream,
-                      letterSpacing: "0.05em",
-                      marginBottom: "0.5rem",
-                      textShadow: `2px 2px 0 ${MARIO.black}`,
-                    }}
-                  >
+                  <div style={{ fontFamily: "'Pixel Game', sans-serif", fontSize: "1.1rem", color: MARIO.cream, letterSpacing: "0.05em", marginBottom: "0.5rem", textShadow: `2px 2px 0 ${MARIO.black}` }}>
                     {game.name}
                   </div>
-                  <div
-                    style={{
-                      fontFamily: "'PixelPurl', sans-serif",
-                      fontSize: "1.1rem",
-                      color: MARIO.cream,
-                      letterSpacing: "0.03em",
-                      textShadow: `1px 1px 0 ${MARIO.black}`,
-                    }}
-                  >
+                  <div style={{ fontFamily: "'PixelPurl', sans-serif", fontSize: "1.1rem", color: MARIO.cream, letterSpacing: "0.03em", textShadow: `1px 1px 0 ${MARIO.black}` }}>
                     {game.description}
                   </div>
                 </button>
@@ -414,6 +283,13 @@ export default function GamePage() {
           </div>
         )}
       </div>
+
+      <style>{`
+        @keyframes drift {
+          from { background-position: 0 0; }
+          to { background-position: 75px 0; }
+        }
+      `}</style>
     </div>
   );
 }
