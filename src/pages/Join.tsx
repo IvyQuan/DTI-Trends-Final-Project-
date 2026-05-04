@@ -156,7 +156,7 @@ export default function JoinPage() {
         ADD AT LEAST{" "}
         <span
           style={{
-            color: players.length >= 2 ? MARIO.green : MARIO.red,
+            color: MARIO.blue,
             textShadow: `3px 3px 0 ${MARIO.black}`,
             fontFamily: "'Pixel Game', sans-serif",
           }}
@@ -299,7 +299,9 @@ export default function JoinPage() {
           onClick={() => navigate("/game")}
           disabled={players.length < 2}
           style={{
-            ...pixelButtonStyle(MARIO.red, MARIO.cream, players.length < 2),
+            ...pixelButtonStyle(players.length < 2 ? MARIO.red : MARIO.green, 
+              MARIO.cream, 
+              players.length < 2),
             fontSize: "1.8rem",
             padding: "1.2rem 2.5rem",
           }}
