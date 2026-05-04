@@ -88,17 +88,19 @@ const MINIGAMES: {
   {
     key: "trivia",
     name: "TRIVIA",
-    description: "FIRST CORRECT = +2",
+    description: "CORRECT = +1, INCORRECT = -1",
     icon: "!",
     color: MARIO.red,
   },
-  {
+  /**
+   * {
     key: "pictionary",
     name: "PICTIONARY",
     description: "GUESSER +2, DESCRIBER +1",
     icon: "✎",
     color: MARIO.green,
-  },
+  
+    },*/
 ];
 
 const MINIGAME_COMPONENTS: Record<MinigameKey, JSX.Element> = {
@@ -258,7 +260,7 @@ export default function GamePage() {
                   fontSize: "2rem",
                   color: p.points < 0 ? MARIO.black : MARIO.cream,
                   lineHeight: 1,
-                  textShadow: `3px 3px 0 ${MARIO.black}`,
+                  textShadow: p.points < 0 ? `3px 3px 0 ${MARIO.cream}` : `3px 3px 0 ${MARIO.black}`,
                 }}
               >
                 {p.points}
@@ -321,7 +323,7 @@ export default function GamePage() {
             <button
               onClick={() => setActiveGame(null)}
               style={{
-                ...pixelButton(MARIO.yellow, MARIO.black),
+                ...pixelButton(MARIO.yellow, MARIO.cream),
                 alignSelf: "flex-start",
               }}
             >

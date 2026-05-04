@@ -134,15 +134,25 @@ export default function JoinPage() {
 
         {/* Tagline */}
         <p
+        style={{
+          fontFamily: "'PixelPurl', sans-serif",
+          fontSize: "2rem",
+          color: MARIO.black,
+          margin: "1rem 0 2.5rem",
+          lineHeight: 1.2,
+        }}
+        >
+        ADD AT LEAST{" "}
+        <span
           style={{
-            fontFamily: "'PixelPurl', sans-serif",
-            fontSize: "2rem",
-            color: MARIO.black,
-            margin: "1rem 0 2.5rem",
-            lineHeight: 1.2,
+            color: players.length >= 2 ? MARIO.green : MARIO.red,
+            textShadow: `3px 3px 0 ${MARIO.black}`,
+            fontFamily: "'Pixel Game', sans-serif",
           }}
         >
-          ADD PLAYERS, THEN HIT START!
+          2
+        </span>{" "}
+        PLAYERS, THEN HIT START!
         </p>
 
         {/* Form Panel */}
@@ -267,14 +277,14 @@ export default function JoinPage() {
         {/* Start button */}
         <button
           onClick={() => navigate("/game")}
-          disabled={players.length === 0}
+          disabled={players.length < 2}
           style={{
-            ...pixelButtonStyle(MARIO.red, MARIO.cream, players.length === 0),
+            ...pixelButtonStyle(MARIO.red, MARIO.cream, players.length < 2),
             fontSize: "1.8rem",
             padding: "1.2rem 2.5rem",
           }}
           onMouseEnter={(e) => {
-            if (players.length > 0) {
+            if (players.length >= 2) {
               e.currentTarget.style.transform = "translateY(-2px)";
             }
           }}
