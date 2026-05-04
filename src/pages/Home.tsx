@@ -79,14 +79,13 @@ function HomePage() {
   const navigate = useNavigate();
 
   const letters = [
-    { ch: "A", color: MARIO.red, top: "12%", left: "8%", rotate: -8 },
-    { ch: "B", color: MARIO.blue, top: "18%", right: "10%", rotate: 6 },
-    { ch: "X", color: MARIO.yellow, top: "62%", left: "12%", rotate: 10 },
+    { ch: "A", color: MARIO.blue, top: "8%", left: "14%", rotate: -8 },
+    { ch: "B", color: MARIO.blue, top: "15%", right: "10%", rotate: 6 },
+    { ch: "X", color: MARIO.yellow, top: "75%", left: "18%", rotate: 10 },
     { ch: "Y", color: MARIO.green, top: "70%", right: "14%", rotate: -6 },
-    { ch: "★", color: MARIO.yellow, top: "40%", left: "5%", rotate: 0 },
-    { ch: "♥", color: MARIO.red, top: "45%", right: "6%", rotate: 0 },
-    { ch: "◆", color: MARIO.blue, top: "85%", left: "45%", rotate: 0 },
-    { ch: "✦", color: MARIO.green, top: "8%", left: "48%", rotate: 0 },
+    { ch: "C", color: MARIO.red, top: "45%", left: "5%", rotate: 0 },
+    { ch: "D", color: MARIO.red, top: "45%", right: "6%", rotate: 0 },
+    { ch: "Z", color: MARIO.green, top: "8%", left: "48%", rotate: 0 },
   ];
 
   // triangle data url

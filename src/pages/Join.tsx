@@ -24,6 +24,7 @@ const surroundOutline = (color: string, size: number) => {
   return offsets.join(", ");
 };
 
+
 const RainbowText = ({
   text,
   fontSize,
@@ -79,7 +80,7 @@ const pixelButtonStyle = (
 });
 
 export default function JoinPage() {
-  const { players, addPlayer } = useSession();
+  const { players, addPlayer, removePlayer } = useSession();
   const [nameInput, setNameInput] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -99,8 +100,8 @@ export default function JoinPage() {
     }
   };
 
-  // Circle pattern generated url
-  const circlePattern = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'><circle cx='50' cy='50' r='10' fill='%237aa370' opacity='0.5'/></svg>")`;
+
+  const circlePattern = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='70' height='70' viewBox='0 0 70 70'><circle cx='35' cy='35' r='10' fill='%237aa370' opacity='0.5'/></svg>")`;
 
   return (
     <div
@@ -110,21 +111,24 @@ export default function JoinPage() {
         backgroundImage: circlePattern,
         backgroundRepeat: "repeat",
         backgroundSize: "70px 70px",
-        animation: "drift 18s linear infinite",
+        animation: "drift 20s linear infinite",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         padding: "3rem 1rem",
         fontFamily: "'PixelPurl', sans-serif",
+      
       }}
     >
+    
+
       <div
         style={{
           maxWidth: 640,
           width: "100%",
           textAlign: "center",
           position: "relative",
-          zIndex: 1,
+          zIndex: 2,
         }}
       >
         <h1
@@ -209,6 +213,7 @@ export default function JoinPage() {
             </p>
           )}
 
+          {/* Player list with delete buttons */}
           {players.length > 0 && (
             <div
               style={{
@@ -235,15 +240,45 @@ export default function JoinPage() {
                 <div
                   key={p.name}
                   style={{
-                    fontFamily: "'PixelPurl', sans-serif",
-                    fontSize: "1.5rem",
-                    color: LETTER_COLORS[i % LETTER_COLORS.length],
-                    padding: "0.25rem 0",
-                    letterSpacing: "0.05em",
-                    textShadow: `2px 2px 0 ${MARIO.black}`,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "0.4rem 0",
+                    gap: "0.5rem",
                   }}
                 >
-                  P{i + 1} ► {p.name.toUpperCase()}
+                  <span
+                    style={{
+                      fontFamily: "'PixelPurl', sans-serif",
+                      fontSize: "1.5rem",
+                      color: LETTER_COLORS[i % LETTER_COLORS.length],
+                      letterSpacing: "0.05em",
+                      textShadow: `2px 2px 0 ${MARIO.black}`,
+                      flex: 1,
+                    }}
+                  >
+                    P{i + 1} ► {p.name.toUpperCase()}
+                  </span>
+                  <button
+                    onClick={() => removePlayer(p.name)}
+                    style={{
+                      background: MARIO.red,
+                      color: MARIO.cream,
+                      border: `3px solid ${MARIO.black}`,
+                      width: 32,
+                      height: 32,
+                      fontFamily: "'Pixel Game', sans-serif",
+                      fontSize: "1rem",
+                      cursor: "pointer",
+                      padding: 0,
+                      boxShadow: `0 3px 0 ${MARIO.black}`,
+                      textShadow: `1px 1px 0 ${MARIO.black}`,
+                      lineHeight: 1,
+                    }}
+                    title={`Remove ${p.name}`}
+                  >
+                    ✕
+                  </button>
                 </div>
               ))}
             </div>
@@ -276,6 +311,7 @@ export default function JoinPage() {
           from { background-position: 0 0; }
           to { background-position: -70px 0; }
         }
+      
       `}</style>
     </div>
   );
