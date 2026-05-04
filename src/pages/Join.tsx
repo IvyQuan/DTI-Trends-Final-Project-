@@ -79,7 +79,7 @@ const pixelButtonStyle = (
 });
 
 export default function JoinPage() {
-  const { players, addPlayer } = useSession();
+  const { players, addPlayer, removePlayer } = useSession();
   const [nameInput, setNameInput] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -235,18 +235,30 @@ export default function JoinPage() {
               </p>
               {players.map((p, i) => (
                 <div
-                  key={p.name}
-                  style={{
-                    fontFamily: "'PixelPurl', sans-serif",
-                    fontSize: "1.5rem",
-                    color: LETTER_COLORS[i % LETTER_COLORS.length],
-                    padding: "0.25rem 0",
-                    letterSpacing: "0.05em",
-                    textShadow: `2px 2px 0 ${MARIO.black}`,
-                  }}
-                >
-                  P{i + 1} ► {p.name.toUpperCase()}
-                </div>
+  key={p.name}
+  style={{
+    display: "flex", alignItems: "center", justifyContent: "space-between",
+    fontFamily: "'PixelPurl', sans-serif",
+    fontSize: "1.5rem",
+    color: LETTER_COLORS[i % LETTER_COLORS.length],
+    padding: "0.25rem 0",
+    letterSpacing: "0.05em",
+    textShadow: `2px 2px 0 ${MARIO.black}`,
+  }}
+>
+  <span>P{i + 1} ► {p.name.toUpperCase()}</span>
+  <button
+    onClick={() => removePlayer(p.name)}
+    style={{
+      background: MARIO.red, color: MARIO.cream,
+      border: `3px solid ${MARIO.black}`,
+      fontFamily: "'Pixel Game', sans-serif",
+      fontSize: "0.9rem", padding: "0.2rem 0.6rem",
+      cursor: "pointer", boxShadow: `0 3px 0 ${MARIO.black}`,
+      textShadow: `1px 1px 0 ${MARIO.black}`,
+    }}
+  >✕</button>
+</div>
               ))}
             </div>
           )}
