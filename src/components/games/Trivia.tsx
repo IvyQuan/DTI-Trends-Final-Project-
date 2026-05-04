@@ -137,6 +137,7 @@ export default function Trivia() {
   const [playerQueue, setPlayerQueue] = useState<string[]>([]);
   const [usedPlayers, setUsedPlayers] = useState<string[]>([]);
   const [currentPlayer, setCurrentPlayer] = useState("");
+  const [playedThisRound, setPlayedThisRound] = useState<string[]>([]);
 
   const getActivePlayers = () =>
     mode === "free" ? players.filter(p => p.name !== creatorName) : players;
@@ -167,6 +168,7 @@ export default function Trivia() {
     setCurrentPlayer(first);
     setPlayerQueue(queue.slice(1));
     setUsedPlayers([first]);
+    setPlayedThisRound([]);
     setPhase("question");
   };
 
@@ -205,12 +207,15 @@ export default function Trivia() {
   };
 
   const handleAnswer = (i: number) => {
-    if (selected !== null) return;
-    setSelected(i);
-    const correct = i === questions[currentQ].answer;
-    updatePoints(currentPlayer, correct ? 1 : -1);
-    setPhase("reveal");
-  };
+  if (selected !== null) return;
+  setSelected(i);
+  setPlayedThisRound(prev =>
+    prev.includes(currentPlayer) ? prev : [...prev, currentPlayer]
+  );
+  const correct = i === questions[currentQ].answer;
+  updatePoints(currentPlayer, correct ? 1 : -1);
+  setPhase("reveal");
+};
 
   const handleNext = () => {
     const nextIndex = currentQ + 1;
@@ -230,6 +235,7 @@ export default function Trivia() {
     setQuestions([]); setFreeBuilt([]);
     setFreeQ(""); setFreeOpts(["", "", "", ""]); setFreeAnswer(null);
     setCreatorName(""); setRounds(5); setDifficulty("ball");
+    setPlayedThisRound([]);
   };
 
   // SETUP
@@ -482,21 +488,23 @@ export default function Trivia() {
 
   // FINAL
   if (phase === "final") {
-    const sorted = [...players].sort((a, b) => b.points - a.points);
+    const sorted = players
+    .filter(p => playedThisRound.includes(p.name))
+    .sort((a, b) => b.points - a.points);
     return (
       <div style={page}>
         <Title text="GAME OVER!" />
         <div style={{ ...box(C.blue), width: "100%" }}>
           <span style={{ fontFamily: "'Pixel Game', sans-serif", fontSize: "1.1rem", color: C.white, textShadow: `2px 2px 0 ${C.black}`, display: "block", marginBottom: "0.75rem", letterSpacing: "0.04em" }}>LEADERBOARD</span>
-          {sorted.map((p, i) => (
+          {sorted.filter(p => p.name).map((p, i) => (
             <div key={p.name} style={{
               display: "flex", justifyContent: "space-between", alignItems: "center",
               padding: "0.65rem 1rem", marginBottom: "0.5rem",
               background: i === 0 ? C.yellow : C.cream,
               border: `4px solid ${C.black}`, boxShadow: `0 4px 0 ${C.black}`,
             }}>
-              <span style={{ fontFamily: "'Pixel Game', sans-serif", fontSize: "1.1rem", color: C.black, textShadow: i === 0 ? `2px 2px 0 ${C.black}` : "none", letterSpacing: "0.04em" }}>
-                {i === 0 ? "🏆 " : `${i + 1}. `}{p.name.toUpperCase()}
+              <span style={{ fontFamily: "'Pixel Game', sans-serif", fontSize: "1.1rem", color: C.cream, textShadow: i === 0 ? `2px 2px 0 ${C.black}` : "none", letterSpacing: "0.04em" }}>
+                {i === 0 ? "🏆 " : `${i + 1}. `}{p.name ? p.name.toUpperCase() : "???"}
               </span>
               <span style={{ fontFamily: "'Pixel Game', sans-serif", fontSize: "1.4rem", color: i === 0 ? C.red : C.blue, textShadow: `2px 2px 0 ${C.black}` }}>
                 {p.points} PTS
