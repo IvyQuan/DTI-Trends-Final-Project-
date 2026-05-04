@@ -1,3 +1,20 @@
+@font-face {
+  font-family: 'PixelPurl';
+  src: url('/fonts/PixelPurl.ttf') format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pixel Game';
+  src: url('/fonts/Pixel Game.otf') format('opentype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Oxygene';
+  src: url('/fonts/OXYGENE1.TTF') format('truetype');
+  font-display: swap;
+}
+
+
 *, *:before, *:after {
   box-sizing: border-box;
 }
@@ -64,3 +81,10 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 50% !important;
   width: 100%;
 }
+
+body {
+     background: #9bbc0f;
+     font-family: 'VT323', monospace;
+     color: #0f380f;
+   }
+

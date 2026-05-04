@@ -1,47 +1,24 @@
 const express = require('express');
-const fs = require('fs');
-const path = require('path');
-
 const router = express.Router();
-const DATA_FILE = path.join(__dirname, '../data/leaderboard.json');
+const { db } = require('../firebase');
 
-function readLeaderboard() {
-  try {
-    const raw = fs.readFileSync(DATA_FILE, 'utf-8');
-    return JSON.parse(raw);
-  } catch {
-    return [];
-  }
-}
-
-function writeLeaderboard(data) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
-}
-
-router.get('/', (req, res) => {
-  const entries = readLeaderboard();
-  entries.sort((a, b) => b.points - a.points);
-  res.json(entries);
-});
-
-router.post('/update', (req, res) => {
+router.post('/update', async (req, res) => {
   const { players } = req.body;
-  if (!Array.isArray(players)) {
-    return res.status(400).json({ error: 'players must be an array' });
-  }
-  const entries = readLeaderboard();
   for (const player of players) {
-    const existing = entries.find(
-      (e) => e.name.toLowerCase() === player.name.toLowerCase()
-    );
-    if (existing) {
-      existing.points += player.points;
+    const ref = db.collection('leaderboard').doc(player.name);
+    const doc = await ref.get();
+    if (doc.exists) {
+      await ref.update({ totalPoints: doc.data().totalPoints + player.points, gamesPlayed: doc.data().gamesPlayed + 1 });
     } else {
-      entries.push({ name: player.name, points: player.points });
+      await ref.set({ name: player.name, totalPoints: player.points, gamesPlayed: 1 });
     }
   }
-  writeLeaderboard(entries);
   res.json({ success: true });
+});
+
+router.get('/', async (req, res) => {
+  const snapshot = await db.collection('leaderboard').orderBy('totalPoints', 'desc').get();
+  res.json(snapshot.docs.map(doc => doc.data()));
 });
 
 module.exports = router;
