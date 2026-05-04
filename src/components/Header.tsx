@@ -1,92 +1,113 @@
-import { Header } from "@mantine/core";
+import {
+  createStyles,
+  Header,
+  Group,
+  rem,
+} from "@mantine/core";
 import { Link, useLocation } from "react-router-dom";
 
-const C = {
-  red: "#e52521", yellow: "#fbd000", blue: "#049cd8",
-  green: "#43b047", black: "#000", cream: "#fff8e7",
-};
+const useStyles = createStyles(() => ({
+  header: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: "100%",
+    padding: `0 ${rem(24)}`,
+  },
 
-const COLORS = [C.red, C.yellow, C.blue, C.green];
+  logo: {
+    display: "flex",
+    alignItems: "center",
+    gap: "0.5rem",
+    fontFamily: "'Oxygene', sans-serif",
+    fontSize: "1.6rem",
+    color: "#2251be",
+    textDecoration: "none",
+    textShadow: "3px 3px 0 #000",
+    letterSpacing: "0.05em",
+    flex: 1,
+    whiteSpace: "nowrap",
+  },
 
-const outline = (size: number) => {
-  const o: string[] = [];
-  for (let x = -size; x <= size; x++)
-    for (let y = -size; y <= size; y++)
-      if (x || y) o.push(`${x}px ${y}px 0 ${C.black}`);
-  return o.join(", ");
-};
+  links: {
+    display: "flex",
+    gap: "0.4rem",
+  },
 
-const Logo = () => (
-  <Link to="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-    <span style={{ display: "inline-block" }}>
-      {"GAME NIGHT".split("").map((ch, i) => (
-        <span key={i} style={{
-          display: "inline-block",
-          color: ch === " " ? "transparent" : COLORS[i % 4],
-          textShadow: ch === " " ? "none" : outline(2),
-          fontSize: "1.2rem",
-          fontFamily: "'Pixel Game', sans-serif",
-          transform: ch === " " ? "none" : `translateY(${i % 2 === 0 ? -2 : 2}px)`,
-          padding: "0 0.03em",
-          letterSpacing: "0.02em",
-        }}>{ch === " " ? "\u00A0" : ch}</span>
-      ))}
-    </span>
-  </Link>
-);
+  spacer: {
+    flex: 1,
+  },
+
+  link: {
+    display: "block",
+    lineHeight: 1,
+    padding: `${rem(8)} ${rem(14)}`,
+    textDecoration: "none",
+    color: "rgba(255,255,255,0.65)",
+    fontFamily: "'Pixel Game', sans-serif",
+    fontSize: "1rem",
+    letterSpacing: "0.05em",
+    textTransform: "uppercase",
+    border: "3px solid transparent",
+    textShadow: "2px 2px 0 #000",
+    transition: "all 0.1s",
+    whiteSpace: "nowrap",
+
+    "&:hover": {
+      color: "#fbd000",
+    },
+  },
+
+  linkActive: {
+    "&, &:hover": {
+      color: "#000",
+      background: "#ceb123",
+      border: "3px solid #000",
+      textShadow: "none",
+      boxShadow: "0 4px 0 #000",
+    },
+  },
+}));
 
 interface HeaderSimpleProps {
   links: { link: string; label: string }[];
 }
 
 export function HeaderSimple({ links }: HeaderSimpleProps) {
+  const { classes, cx } = useStyles();
   const location = useLocation();
+
+  const items = links.map((link) => (
+    <Link
+      key={link.label}
+      to={link.link}
+      className={cx(classes.link, {
+        [classes.linkActive]: location.pathname === link.link,
+      })}
+    >
+      {link.label}
+    </Link>
+  ));
 
   return (
     <Header
-      height={64}
+      height={60}
       style={{
-        background: C.blue,
-        borderBottom: `5px solid ${C.black}`,
-        boxShadow: `0 5px 0 ${C.black}`,
-        zIndex: 100,
+        background: "#1a1a2a",
+        borderBottom: "5px solid #000",
+        boxShadow: "inset 0 -2px 0 rgba(255,255,255,0.05)",
       }}
     >
-      <div style={{
-        display: "flex", alignItems: "center",
-        height: "100%", padding: "0 1.5rem",
-      }}>
-        {/* Logo left */}
-        <div style={{ flex: 1 }}>
-          <Logo />
-        </div>
+      <div className={classes.header}>
+        <Link to="/" className={classes.logo}>
+          ▲ <span>GAME NIGHT</span>
+        </Link>
 
-        {/* Nav centered */}
-        <div style={{ display: "flex", gap: "0.4rem", alignItems: "center" }}>
-          {links.map((link) => {
-            const active = location.pathname === link.link;
-            return (
-              <Link key={link.label} to={link.link} style={{
-                fontFamily: "'Pixel Game', sans-serif",
-                fontSize: "1rem", letterSpacing: "0.06em",
-                textDecoration: "none",
-                padding: "0.45rem 1rem",
-                color: active ? C.blue : C.cream,
-                background: active ? C.yellow : "transparent",
-                border: `3px solid ${active ? C.black : "transparent"}`,
-                boxShadow: active ? `0 4px 0 ${C.black}` : "none",
-                textShadow: `2px 2px 0 ${active ? C.black : "rgba(0,0,0,0.4)"}`,
-                transition: "background 0.1s, color 0.1s",
-                whiteSpace: "nowrap",
-              }}>
-                {link.label.toUpperCase()}
-              </Link>
-            );
-          })}
-        </div>
+        <Group spacing={4} className={classes.links}>
+          {items}
+        </Group>
 
-        {/* Right spacer */}
-        <div style={{ flex: 1 }} />
+        <div className={classes.spacer} />
       </div>
     </Header>
   );

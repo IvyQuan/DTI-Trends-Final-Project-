@@ -11,7 +11,6 @@ const MARIO = {
 
 const LETTER_COLORS = [MARIO.red, MARIO.yellow, MARIO.blue, MARIO.green];
 
-// Thick uniform outline using stacked text-shadows in all directions
 const surroundOutline = (color: string, size: number) => {
   const offsets: string[] = [];
   for (let x = -size; x <= size; x++) {
@@ -23,7 +22,6 @@ const surroundOutline = (color: string, size: number) => {
   return offsets.join(", ");
 };
 
-// Directional drop shadow trailing down-right
 const dropShadowTrail = (color: string, offset: number) =>
   `${offset}px ${offset}px 0 ${color}, ${offset * 2}px ${offset * 2}px 0 ${color}`;
 
@@ -43,7 +41,6 @@ const pixelButtonStyle = (bg: string, fg: string): React.CSSProperties => ({
   textShadow: `2px 2px 0 ${MARIO.black}`,
 });
 
-// Per-letter rainbow text. Spaces get rendered at half the fontSize to tighten gaps.
 const RainbowText = ({
   text,
   fontSize,
@@ -53,7 +50,6 @@ const RainbowText = ({
   fontSize: string;
   outlineSize?: number;
 }) => {
-  // Helper: extract numeric value from "12rem" so we can scale the space
   const fontSizeValue = parseFloat(fontSize);
   const fontSizeUnit = fontSize.replace(String(fontSizeValue), "");
   const spaceSize = `${fontSizeValue * 0.4}${fontSizeUnit}`;
@@ -67,7 +63,6 @@ const RainbowText = ({
             display: "inline-block",
             color: ch === " " ? "transparent" : LETTER_COLORS[i % LETTER_COLORS.length],
             textShadow: ch === " " ? "none" : surroundOutline(MARIO.black, outlineSize),
-            // Spaces use a smaller fontSize so the gap between words is tighter
             fontSize: ch === " " ? spaceSize : fontSize,
             transform: ch === " " ? "none" : `translateY(${i % 2 === 0 ? -3 : 3}px)`,
             padding: "0 0.05em",
@@ -84,23 +79,28 @@ function HomePage() {
   const navigate = useNavigate();
 
   const letters = [
-    { ch: "A", color: MARIO.red, top: "12%", left: "8%", rotate: -8 },
-    { ch: "B", color: MARIO.blue, top: "18%", right: "10%", rotate: 6 },
-    { ch: "X", color: MARIO.yellow, top: "62%", left: "12%", rotate: 10 },
+    { ch: "A", color: MARIO.blue, top: "8%", left: "14%", rotate: -8 },
+    { ch: "B", color: MARIO.blue, top: "15%", right: "10%", rotate: 6 },
+    { ch: "X", color: MARIO.yellow, top: "75%", left: "18%", rotate: 10 },
     { ch: "Y", color: MARIO.green, top: "70%", right: "14%", rotate: -6 },
-    { ch: "★", color: MARIO.yellow, top: "40%", left: "5%", rotate: 0 },
-    { ch: "♥", color: MARIO.red, top: "45%", right: "6%", rotate: 0 },
-    { ch: "◆", color: MARIO.blue, top: "85%", left: "45%", rotate: 0 },
-    { ch: "✦", color: MARIO.green, top: "8%", left: "48%", rotate: 0 },
+    { ch: "C", color: MARIO.red, top: "45%", left: "5%", rotate: 0 },
+    { ch: "D", color: MARIO.red, top: "45%", right: "6%", rotate: 0 },
+    { ch: "Z", color: MARIO.green, top: "8%", left: "48%", rotate: 0 },
   ];
+
+  // triangle data url
+  const trianglePattern = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'><polygon points='40,15 60,55 20,55' fill='%23c9a878' opacity='0.5'/></svg>")`;
 
   return (
     <div
       style={{
         minHeight: "calc(100vh - 60px)",
-        background: MARIO.cream,
+        background: "#e8d5a8",
+        backgroundImage: trianglePattern,
+        backgroundRepeat: "repeat",
+        backgroundSize: "80px 80px",
+        animation: "drift 18s linear infinite",
         display: "flex",
-        alignItems: "center",
         justifyContent: "center",
         padding: "4rem 1rem",
         fontFamily: "'VT323', monospace",
@@ -108,7 +108,6 @@ function HomePage() {
         overflow: "hidden",
       }}
     >
-      {/* Side decoratives — outline + drop shadow trail */}
       {letters.map((l, i) => (
         <div
           key={i}
@@ -121,12 +120,12 @@ function HomePage() {
             fontSize: "3.2rem",
             color: l.color,
             transform: `rotate(${l.rotate}deg)`,
-            // Outline + drop shadow trail combined
             textShadow: `${surroundOutline(MARIO.black, 3)}, ${dropShadowTrail(MARIO.black, 5)}`,
             pointerEvents: "none",
             userSelect: "none",
             animation: `floatDeco ${2 + (i % 3) * 0.4}s ease-in-out infinite alternate`,
             animationDelay: `${i * 0.2}s`,
+            zIndex: 1,
           }}
         >
           {l.ch}
@@ -137,10 +136,9 @@ function HomePage() {
         style={{
           textAlign: "center",
           position: "relative",
-          zIndex: 1,
+          zIndex: 2,
         }}
       >
-        {/* Title */}
         <h1
           style={{
             fontFamily: "'Oxygene', sans-serif",
@@ -155,7 +153,6 @@ function HomePage() {
           <RainbowText text="GAME NIGHT" fontSize="12rem" outlineSize={7} />
         </h1>
 
-        {/* Subtitle */}
         <h2
           style={{
             fontFamily: "'Oxygene', sans-serif",
@@ -171,7 +168,6 @@ function HomePage() {
           <RainbowText text="ORGANIZER" fontSize="3.5rem" outlineSize={4} />
         </h2>
 
-        {/* Tagline */}
         <p
           style={{
             fontFamily: "'PixelPurl', sans-serif",
@@ -186,7 +182,6 @@ function HomePage() {
           GATHER YOUR PARTY AND HAVE FUN!
         </p>
 
-        {/* Buttons */}
         <div
           style={{
             display: "flex",
@@ -230,6 +225,10 @@ function HomePage() {
         @keyframes floatDeco {
           from { transform: translateY(0); }
           to { transform: translateY(-10px); }
+        }
+        @keyframes drift {
+          from { background-position: 0 0; }
+          to { background-position: 90px 0; }
         }
       `}</style>
     </div>

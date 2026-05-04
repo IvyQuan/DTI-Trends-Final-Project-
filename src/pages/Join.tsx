@@ -24,6 +24,7 @@ const surroundOutline = (color: string, size: number) => {
   return offsets.join(", ");
 };
 
+
 const RainbowText = ({
   text,
   fontSize,
@@ -99,26 +100,37 @@ export default function JoinPage() {
     }
   };
 
+
+  const circlePattern = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='70' height='70' viewBox='0 0 70 70'><circle cx='35' cy='35' r='10' fill='%237aa370' opacity='0.5'/></svg>")`;
+
   return (
     <div
       style={{
         minHeight: "calc(100vh - 60px)",
-        background: MARIO.cream,
+        background: "#a8c89a",
+        backgroundImage: circlePattern,
+        backgroundRepeat: "repeat",
+        backgroundSize: "70px 70px",
+        animation: "drift 20s linear infinite",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         padding: "3rem 1rem",
         fontFamily: "'PixelPurl', sans-serif",
+      
       }}
     >
+    
+
       <div
         style={{
           maxWidth: 640,
           width: "100%",
           textAlign: "center",
+          position: "relative",
+          zIndex: 2,
         }}
       >
-        {/* Title */}
         <h1
           style={{
             fontFamily: "'Oxygene', sans-serif",
@@ -132,7 +144,6 @@ export default function JoinPage() {
           <RainbowText text="NEW GAME" fontSize="6rem" outlineSize={5} />
         </h1>
 
-        {/* Tagline */}
         <p
         style={{
           fontFamily: "'PixelPurl', sans-serif",
@@ -155,7 +166,6 @@ export default function JoinPage() {
         PLAYERS, THEN HIT START!
         </p>
 
-        {/* Form Panel */}
         <div
           style={{
             background: MARIO.yellow,
@@ -165,14 +175,7 @@ export default function JoinPage() {
             marginBottom: "2.5rem",
           }}
         >
-          {/* Input row */}
-          <div
-            style={{
-              display: "flex",
-              gap: "0.75rem",
-              marginBottom: "1rem",
-            }}
-          >
+          <div style={{ display: "flex", gap: "0.75rem", marginBottom: "1rem" }}>
             <input
               type="text"
               value={nameInput}
@@ -220,7 +223,7 @@ export default function JoinPage() {
             </p>
           )}
 
-          {/* Player list */}
+          {/* Player list with delete buttons */}
           {players.length > 0 && (
             <div
               style={{
@@ -245,36 +248,53 @@ export default function JoinPage() {
               </p>
               {players.map((p, i) => (
                 <div
-  key={p.name}
-  style={{
-    display: "flex", alignItems: "center", justifyContent: "space-between",
-    fontFamily: "'PixelPurl', sans-serif",
-    fontSize: "1.5rem",
-    color: LETTER_COLORS[i % LETTER_COLORS.length],
-    padding: "0.25rem 0",
-    letterSpacing: "0.05em",
-    textShadow: `2px 2px 0 ${MARIO.black}`,
-  }}
->
-  <span>P{i + 1} ► {p.name.toUpperCase()}</span>
-  <button
-    onClick={() => removePlayer(p.name)}
-    style={{
-      background: MARIO.red, color: MARIO.cream,
-      border: `3px solid ${MARIO.black}`,
-      fontFamily: "'Pixel Game', sans-serif",
-      fontSize: "0.9rem", padding: "0.2rem 0.6rem",
-      cursor: "pointer", boxShadow: `0 3px 0 ${MARIO.black}`,
-      textShadow: `1px 1px 0 ${MARIO.black}`,
-    }}
-  >✕</button>
-</div>
+                  key={p.name}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "0.4rem 0",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: "'PixelPurl', sans-serif",
+                      fontSize: "1.5rem",
+                      color: LETTER_COLORS[i % LETTER_COLORS.length],
+                      letterSpacing: "0.05em",
+                      textShadow: `2px 2px 0 ${MARIO.black}`,
+                      flex: 1,
+                    }}
+                  >
+                    P{i + 1} ► {p.name.toUpperCase()}
+                  </span>
+                  <button
+                    onClick={() => removePlayer(p.name)}
+                    style={{
+                      background: MARIO.red,
+                      color: MARIO.cream,
+                      border: `3px solid ${MARIO.black}`,
+                      width: 32,
+                      height: 32,
+                      fontFamily: "'Pixel Game', sans-serif",
+                      fontSize: "1rem",
+                      cursor: "pointer",
+                      padding: 0,
+                      boxShadow: `0 3px 0 ${MARIO.black}`,
+                      textShadow: `1px 1px 0 ${MARIO.black}`,
+                      lineHeight: 1,
+                    }}
+                    title={`Remove ${p.name}`}
+                  >
+                    ✕
+                  </button>
+                </div>
               ))}
             </div>
           )}
         </div>
 
-        {/* Start button */}
         <button
           onClick={() => navigate("/game")}
           disabled={players.length < 2}
@@ -295,6 +315,14 @@ export default function JoinPage() {
           ▶ START GAME
         </button>
       </div>
+
+      <style>{`
+        @keyframes drift {
+          from { background-position: 0 0; }
+          to { background-position: -70px 0; }
+        }
+      
+      `}</style>
     </div>
   );
 }
