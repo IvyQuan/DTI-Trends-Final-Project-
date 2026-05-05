@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { db } from './firebase';
 
 interface LeaderboardEntry {
   name: string;
@@ -11,17 +10,38 @@ export default function LeaderboardPage() {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [editingName, setEditingName] = useState<string | null>(null);
+  const [editPoints, setEditPoints] = useState<number>(0);
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const loadEntries = () => {
     fetch('/api/leaderboard')
-      .then((r) => {
-        if (!r.ok) throw new Error('Server error');
-        return r.json();
-      })
+      .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
       .then((data) => { setEntries(data); setLoading(false); })
       .catch(() => { setError('Failed to load leaderboard. Is the server running?'); setLoading(false); });
-  }, []);
+  };
+
+  useEffect(() => { loadEntries(); }, []);
+
+  const handleDelete = async (name: string) => {
+    await fetch(`/api/leaderboard/${encodeURIComponent(name)}`, { method: 'DELETE' });
+    loadEntries();
+  };
+
+  const handleEdit = (entry: LeaderboardEntry) => {
+    setEditingName(entry.name);
+    setEditPoints(entry.totalPoints);
+  };
+
+  const handleSave = async (name: string) => {
+    await fetch(`/api/leaderboard/${encodeURIComponent(name)}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ totalPoints: editPoints }),
+    });
+    setEditingName(null);
+    loadEntries();
+  };
 
   return (
     <div style={{ padding: '2rem', maxWidth: '480px', margin: '0 auto' }}>
@@ -32,7 +52,7 @@ export default function LeaderboardPage() {
 
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      {!loading && !error && entries.length === 0 && <p>No scores yet. End a session to add scores.</p>}
+      {!loading && !error && entries.length === 0 && <p>No scores yet.</p>}
 
       {!loading && !error && entries.length > 0 && (
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -41,6 +61,7 @@ export default function LeaderboardPage() {
               <th style={{ textAlign: 'left', padding: '0.5rem', borderBottom: '2px solid #ccc' }}>Rank</th>
               <th style={{ textAlign: 'left', padding: '0.5rem', borderBottom: '2px solid #ccc' }}>Name</th>
               <th style={{ textAlign: 'right', padding: '0.5rem', borderBottom: '2px solid #ccc' }}>Points</th>
+              <th style={{ padding: '0.5rem', borderBottom: '2px solid #ccc' }}></th>
             </tr>
           </thead>
           <tbody>
@@ -48,8 +69,25 @@ export default function LeaderboardPage() {
               <tr key={entry.name}>
                 <td style={{ padding: '0.5rem', borderBottom: '1px solid #eee', color: '#666' }}>#{i + 1}</td>
                 <td style={{ padding: '0.5rem', borderBottom: '1px solid #eee' }}>{entry.name}</td>
-                <td style={{ padding: '0.5rem', borderBottom: '1px solid #eee', textAlign: 'right', fontWeight: 'bold', color: entry.totalPoints < 0 ? '#c00' : 'inherit' }}>
-                  {entry.totalPoints}
+                <td style={{ padding: '0.5rem', borderBottom: '1px solid #eee', textAlign: 'right', fontWeight: 'bold' }}>
+                  {editingName === entry.name ? (
+                    <input
+                      type="number"
+                      value={editPoints}
+                      onChange={(e) => setEditPoints(Number(e.target.value))}
+                      style={{ width: 60, textAlign: 'right' }}
+                    />
+                  ) : (
+                    <span style={{ color: entry.totalPoints < 0 ? '#c00' : 'inherit' }}>{entry.totalPoints}</span>
+                  )}
+                </td>
+                <td style={{ padding: '0.5rem', borderBottom: '1px solid #eee', display: 'flex', gap: '0.5rem' }}>
+                  {editingName === entry.name ? (
+                    <button onClick={() => handleSave(entry.name)}>Save</button>
+                  ) : (
+                    <button onClick={() => handleEdit(entry)}>Edit</button>
+                  )}
+                  <button onClick={() => handleDelete(entry.name)} style={{ color: 'red' }}>Delete</button>
                 </td>
               </tr>
             ))}
