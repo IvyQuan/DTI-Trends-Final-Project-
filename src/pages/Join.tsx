@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "../context/SessionContext";
 
-const MARIO = {
+const COLORS = {
   red: "#e52521",
   yellow: "#fbd000",
   blue: "#049cd8",
@@ -11,7 +11,7 @@ const MARIO = {
   cream: "#fff8e7",
 };
 
-const LETTER_COLORS = [MARIO.red, MARIO.yellow, MARIO.blue, MARIO.green];
+const LETTER_COLORS = [COLORS.red, COLORS.yellow, COLORS.blue, COLORS.green];
 
 const surroundOutline = (color: string, size: number) => {
   const offsets: string[] = [];
@@ -46,7 +46,7 @@ const RainbowText = ({
           style={{
             display: "inline-block",
             color: ch === " " ? "transparent" : LETTER_COLORS[i % LETTER_COLORS.length],
-            textShadow: ch === " " ? "none" : surroundOutline(MARIO.black, outlineSize),
+            textShadow: ch === " " ? "none" : surroundOutline(COLORS.black, outlineSize),
             fontSize: ch === " " ? spaceSize : fontSize,
             transform: ch === " " ? "none" : `translateY(${i % 2 === 0 ? -3 : 3}px)`,
             padding: "0 0.05em",
@@ -66,16 +66,16 @@ const pixelButtonStyle = (
 ): React.CSSProperties => ({
   background: disabled ? "#cccccc" : bg,
   color: disabled ? "#888888" : fg,
-  border: `4px solid ${MARIO.black}`,
+  border: `4px solid ${COLORS.black}`,
   padding: "1rem 1.8rem",
   fontFamily: "'Pixel Game', sans-serif",
   fontSize: "1.4rem",
   letterSpacing: "0.08em",
   cursor: disabled ? "not-allowed" : "pointer",
-  boxShadow: `0 6px 0 ${MARIO.black}`,
+  boxShadow: `0 6px 0 ${COLORS.black}`,
   textTransform: "uppercase",
   transition: "transform 0.1s",
-  textShadow: disabled ? "none" : `2px 2px 0 ${MARIO.black}`,
+  textShadow: disabled ? "none" : `2px 2px 0 ${COLORS.black}`,
   opacity: disabled ? 0.6 : 1,
 });
 
@@ -148,7 +148,7 @@ export default function JoinPage() {
         style={{
           fontFamily: "'PixelPurl', sans-serif",
           fontSize: "2rem",
-          color: MARIO.black,
+          color: COLORS.black,
           margin: "1rem 0 2.5rem",
           lineHeight: 1.2,
         }}
@@ -156,8 +156,8 @@ export default function JoinPage() {
         ADD AT LEAST{" "}
         <span
           style={{
-            color: MARIO.blue,
-            textShadow: `3px 3px 0 ${MARIO.black}`,
+            color: COLORS.blue,
+            textShadow: `3px 3px 0 ${COLORS.black}`,
             fontFamily: "'Pixel Game', sans-serif",
           }}
         >
@@ -168,10 +168,10 @@ export default function JoinPage() {
 
         <div
           style={{
-            background: MARIO.yellow,
-            border: `5px solid ${MARIO.black}`,
+            background: COLORS.yellow,
+            border: `5px solid ${COLORS.black}`,
             padding: "2rem 1.5rem",
-            boxShadow: `0 8px 0 ${MARIO.black}`,
+            boxShadow: `0 8px 0 ${COLORS.black}`,
             marginBottom: "2.5rem",
           }}
         >
@@ -190,9 +190,9 @@ export default function JoinPage() {
                 padding: "0.75rem 1rem",
                 fontFamily: "'PixelPurl', sans-serif",
                 fontSize: "1.6rem",
-                background: MARIO.cream,
-                color: MARIO.black,
-                border: `4px solid ${MARIO.black}`,
+                background: COLORS.cream,
+                color: COLORS.black,
+                border: `4px solid ${COLORS.black}`,
                 outline: "none",
                 letterSpacing: "0.05em",
                 borderRadius: 0,
@@ -200,7 +200,7 @@ export default function JoinPage() {
             />
             <button
               onClick={handleAdd}
-              style={pixelButtonStyle(MARIO.green, MARIO.cream)}
+              style={pixelButtonStyle(COLORS.green, COLORS.cream)}
             >
               ADD
             </button>
@@ -211,11 +211,11 @@ export default function JoinPage() {
               style={{
                 fontFamily: "'PixelPurl', sans-serif",
                 fontSize: "1.4rem",
-                color: MARIO.red,
-                background: MARIO.cream,
+                color: COLORS.red,
+                background: COLORS.cream,
                 padding: "0.5rem 0.75rem",
                 margin: "0.75rem 0 0",
-                border: `3px solid ${MARIO.black}`,
+                border: `3px solid ${COLORS.black}`,
                 letterSpacing: "0.05em",
               }}
             >
@@ -227,8 +227,8 @@ export default function JoinPage() {
           {players.length > 0 && (
             <div
               style={{
-                background: MARIO.cream,
-                border: `4px solid ${MARIO.black}`,
+                background: COLORS.cream,
+                border: `4px solid ${COLORS.black}`,
                 padding: "1rem 1.25rem",
                 marginTop: "1rem",
                 textAlign: "left",
@@ -238,10 +238,10 @@ export default function JoinPage() {
                 style={{
                   fontFamily: "'Pixel Game', sans-serif",
                   fontSize: "1.2rem",
-                  color: MARIO.black,
+                  color: COLORS.black,
                   margin: "0 0 0.75rem",
                   letterSpacing: "0.1em",
-                  textShadow: `2px 2px 0 ${MARIO.yellow}`,
+                  textShadow: `2px 2px 0 ${COLORS.yellow}`,
                 }}
               >
                 PLAYERS [{players.length}]
@@ -263,7 +263,7 @@ export default function JoinPage() {
                       fontSize: "1.5rem",
                       color: LETTER_COLORS[i % LETTER_COLORS.length],
                       letterSpacing: "0.05em",
-                      textShadow: `2px 2px 0 ${MARIO.black}`,
+                      textShadow: `2px 2px 0 ${COLORS.black}`,
                       flex: 1,
                     }}
                   >
@@ -272,17 +272,17 @@ export default function JoinPage() {
                   <button
                     onClick={() => removePlayer(p.name)}
                     style={{
-                      background: MARIO.red,
-                      color: MARIO.cream,
-                      border: `3px solid ${MARIO.black}`,
+                      background: COLORS.red,
+                      color: COLORS.cream,
+                      border: `3px solid ${COLORS.black}`,
                       width: 32,
                       height: 32,
                       fontFamily: "'Pixel Game', sans-serif",
                       fontSize: "1rem",
                       cursor: "pointer",
                       padding: 0,
-                      boxShadow: `0 3px 0 ${MARIO.black}`,
-                      textShadow: `1px 1px 0 ${MARIO.black}`,
+                      boxShadow: `0 3px 0 ${COLORS.black}`,
+                      textShadow: `1px 1px 0 ${COLORS.black}`,
                       lineHeight: 1,
                     }}
                     title={`Remove ${p.name}`}
@@ -299,8 +299,8 @@ export default function JoinPage() {
           onClick={() => navigate("/game")}
           disabled={players.length < 2}
           style={{
-            ...pixelButtonStyle(players.length < 2 ? MARIO.red : MARIO.green, 
-              MARIO.cream, 
+            ...pixelButtonStyle(players.length < 2 ? COLORS.red : COLORS.green, 
+              COLORS.cream, 
               players.length < 2),
             fontSize: "1.8rem",
             padding: "1.2rem 2.5rem",

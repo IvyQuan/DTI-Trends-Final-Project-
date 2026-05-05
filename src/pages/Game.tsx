@@ -8,7 +8,7 @@ import Pictionary from "../components/games/Pictionary";
 
 type MinigameKey = "wavelength" | "twotruthsonelie" | "trivia" | "pictionary";
 
-const MARIO = {
+const COLORS = {
   red: "#e52521",
   yellow: "#fbd000",
   blue: "#049cd8",
@@ -17,7 +17,7 @@ const MARIO = {
   cream: "#fff8e7",
 };
 
-const LETTER_COLORS = [MARIO.red, MARIO.yellow, MARIO.blue, MARIO.green];
+const LETTER_COLORS = [COLORS.red, COLORS.yellow, COLORS.blue, COLORS.green];
 
 const surroundOutline = (color: string, size: number) => {
   const offsets: string[] = [];
@@ -51,7 +51,7 @@ const RainbowText = ({
           style={{
             display: "inline-block",
             color: ch === " " ? "transparent" : LETTER_COLORS[i % LETTER_COLORS.length],
-            textShadow: ch === " " ? "none" : surroundOutline(MARIO.black, outlineSize),
+            textShadow: ch === " " ? "none" : surroundOutline(COLORS.black, outlineSize),
             fontSize: ch === " " ? spaceSize : fontSize,
             transform: ch === " " ? "none" : `translateY(${i % 2 === 0 ? -2 : 2}px)`,
             padding: "0 0.05em",
@@ -76,31 +76,22 @@ const MINIGAMES: {
     name: "WAVELENGTH",
     description: "+2 EXACT, +1 ADJACENT",
     icon: "≈",
-    color: MARIO.blue,
+    color: COLORS.blue,
   },
   {
     key: "twotruthsonelie",
     name: "2 TRUTHS 1 LIE",
     description: "FOOL OTHERS, EARN PTS",
     icon: "?",
-    color: MARIO.yellow,
+    color: COLORS.yellow,
   },
   {
     key: "trivia",
     name: "TRIVIA",
     description: "CORRECT = +1, INCORRECT = -1",
     icon: "!",
-    color: MARIO.red,
+    color: COLORS.red,
   },
-  /**
-   * {
-    key: "pictionary",
-    name: "PICTIONARY",
-    description: "GUESSER +2, DESCRIBER +1",
-    icon: "✎",
-    color: MARIO.green,
-  
-    },*/
 ];
 
 const MINIGAME_COMPONENTS: Record<MinigameKey, JSX.Element> = {
@@ -113,15 +104,15 @@ const MINIGAME_COMPONENTS: Record<MinigameKey, JSX.Element> = {
 const pixelButton = (bg: string, fg: string): React.CSSProperties => ({
   background: bg,
   color: fg,
-  border: `4px solid ${MARIO.black}`,
+  border: `4px solid ${COLORS.black}`,
   padding: "0.7rem 1.4rem",
   fontFamily: "'Pixel Game', sans-serif",
   fontSize: "1.1rem",
   letterSpacing: "0.05em",
   cursor: "pointer",
-  boxShadow: `0 5px 0 ${MARIO.black}`,
+  boxShadow: `0 5px 0 ${COLORS.black}`,
   textTransform: "uppercase",
-  textShadow: `2px 2px 0 ${MARIO.black}`,
+  textShadow: `2px 2px 0 ${COLORS.black}`,
   transition: "transform 0.1s",
 });
 
@@ -135,7 +126,7 @@ export default function GamePage() {
       <div
         style={{
           minHeight: "calc(100vh - 60px)",
-          background: MARIO.cream,
+          background: COLORS.cream,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -161,7 +152,7 @@ export default function GamePage() {
           style={{
             fontFamily: "'PixelPurl', sans-serif",
             fontSize: "2rem",
-            color: MARIO.black,
+            color: COLORS.black,
             margin: 0,
           }}
         >
@@ -169,7 +160,7 @@ export default function GamePage() {
         </p>
         <button
           onClick={() => navigate("/join")}
-          style={pixelButton(MARIO.red, MARIO.cream)}
+          style={pixelButton(COLORS.red, COLORS.cream)}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = "translateY(-2px)";
           }}
@@ -210,20 +201,20 @@ export default function GamePage() {
     <div
       style={{
         minHeight: "calc(100vh - 60px)",
-        background: MARIO.cream,
+        background: COLORS.cream,
         fontFamily: "'PixelPurl', sans-serif",
       }}
     >
       {/* Scoreboard bar */}
       <div
         style={{
-          background: MARIO.blue,
+          background: COLORS.blue,
           padding: "1rem 1.5rem",
           display: "flex",
           alignItems: "center",
           gap: "0.75rem",
           flexWrap: "wrap",
-          borderBottom: `5px solid ${MARIO.black}`,
+          borderBottom: `5px solid ${COLORS.black}`,
         }}
       >
         {players.map((p, i) => {
@@ -239,17 +230,17 @@ export default function GamePage() {
                 padding: "0.6rem 0.85rem",
                 background: c,
                 minWidth: 100,
-                border: `4px solid ${MARIO.black}`,
-                boxShadow: `0 4px 0 ${MARIO.black}`,
+                border: `4px solid ${COLORS.black}`,
+                boxShadow: `0 4px 0 ${COLORS.black}`,
               }}
             >
               <span
                 style={{
                   fontFamily: "'Pixel Game', sans-serif",
                   fontSize: "0.95rem",
-                  color: MARIO.cream,
+                  color: COLORS.cream,
                   letterSpacing: "0.05em",
-                  textShadow: `2px 2px 0 ${MARIO.black}`,
+                  textShadow: `2px 2px 0 ${COLORS.black}`,
                 }}
               >
                 {p.name.toUpperCase()}
@@ -258,9 +249,9 @@ export default function GamePage() {
                 style={{
                   fontFamily: "'Oxygene', sans-serif",
                   fontSize: "2rem",
-                  color: p.points < 0 ? MARIO.black : MARIO.cream,
+                  color: p.points < 0 ? COLORS.black : COLORS.cream,
                   lineHeight: 1,
-                  textShadow: p.points < 0 ? `3px 3px 0 ${MARIO.cream}` : `3px 3px 0 ${MARIO.black}`,
+                  textShadow: p.points < 0 ? `3px 3px 0 ${COLORS.cream}` : `3px 3px 0 ${COLORS.black}`,
                 }}
               >
                 {p.points}
@@ -271,9 +262,9 @@ export default function GamePage() {
                   style={{
                     width: 28,
                     height: 28,
-                    background: MARIO.cream,
-                    color: MARIO.black,
-                    border: `3px solid ${MARIO.black}`,
+                    background: COLORS.cream,
+                    color: COLORS.black,
+                    border: `3px solid ${COLORS.black}`,
                     fontFamily: "'Pixel Game', sans-serif",
                     fontSize: "1.1rem",
                     cursor: "pointer",
@@ -288,9 +279,9 @@ export default function GamePage() {
                   style={{
                     width: 28,
                     height: 28,
-                    background: MARIO.cream,
-                    color: MARIO.black,
-                    border: `3px solid ${MARIO.black}`,
+                    background: COLORS.cream,
+                    color: COLORS.black,
+                    border: `3px solid ${COLORS.black}`,
                     fontFamily: "'Pixel Game', sans-serif",
                     fontSize: "1.1rem",
                     cursor: "pointer",
@@ -308,7 +299,7 @@ export default function GamePage() {
         <button
           onClick={handleEndGame}
           style={{
-            ...pixelButton(MARIO.red, MARIO.cream),
+            ...pixelButton(COLORS.red, COLORS.cream),
             marginLeft: "auto",
           }}
         >
@@ -323,7 +314,7 @@ export default function GamePage() {
             <button
               onClick={() => setActiveGame(null)}
               style={{
-                ...pixelButton(MARIO.yellow, MARIO.cream),
+                ...pixelButton( COLORS.yellow, COLORS.cream),
                 alignSelf: "flex-start",
               }}
             >
@@ -361,11 +352,11 @@ export default function GamePage() {
                   style={{
                     padding: "1.5rem 1rem",
                     background: game.color,
-                    border: `5px solid ${MARIO.black}`,
+                    border: `5px solid ${COLORS.black}`,
                     cursor: "pointer",
                     textAlign: "center",
                     fontFamily: "'PixelPurl', sans-serif",
-                    boxShadow: `0 8px 0 ${MARIO.black}`,
+                    boxShadow: `0 8px 0 ${COLORS.black}`,
                     transition: "transform 0.1s",
                   }}
                   onMouseEnter={(e) => {
@@ -379,10 +370,10 @@ export default function GamePage() {
                     style={{
                       fontFamily: "'Pixel Game', sans-serif",
                       fontSize: "3.5rem",
-                      color: MARIO.cream,
+                      color: COLORS.cream,
                       lineHeight: 1,
                       marginBottom: "0.5rem",
-                      textShadow: `3px 3px 0 ${MARIO.black}`,
+                      textShadow: `3px 3px 0 ${COLORS.black}`,
                     }}
                   >
                     {game.icon}
@@ -391,10 +382,10 @@ export default function GamePage() {
                     style={{
                       fontFamily: "'Pixel Game', sans-serif",
                       fontSize: "1.1rem",
-                      color: MARIO.cream,
+                      color: COLORS.cream,
                       letterSpacing: "0.05em",
                       marginBottom: "0.5rem",
-                      textShadow: `2px 2px 0 ${MARIO.black}`,
+                      textShadow: `2px 2px 0 ${COLORS.black}`,
                     }}
                   >
                     {game.name}
@@ -403,9 +394,9 @@ export default function GamePage() {
                     style={{
                       fontFamily: "'PixelPurl', sans-serif",
                       fontSize: "1.1rem",
-                      color: MARIO.cream,
+                      color: COLORS.cream,
                       letterSpacing: "0.03em",
-                      textShadow: `1px 1px 0 ${MARIO.black}`,
+                      textShadow: `1px 1px 0 ${COLORS.black}`,
                     }}
                   >
                     {game.description}
