@@ -21,4 +21,17 @@ router.get('/', async (req, res) => {
   res.json(snapshot.docs.map(doc => doc.data()));
 });
 
+// DELETE a player
+router.delete('/:name', async (req, res) => {
+  await db.collection('leaderboard').doc(req.params.name).delete();
+  res.json({ success: true });
+});
+
+// PUT update a player's points
+router.put('/:name', async (req, res) => {
+  const { totalPoints } = req.body;
+  await db.collection('leaderboard').doc(req.params.name).update({ totalPoints });
+  res.json({ success: true });
+});
+
 module.exports = router;
